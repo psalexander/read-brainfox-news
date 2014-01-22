@@ -5,7 +5,7 @@
     android:background="@drawable/list_selector"
     android:orientation="horizontal"
     android:padding="5dip" >
- 
+
     <!--  ListRow Left sied Thumbnail image -->
     <LinearLayout android:id="@+id/thumbnail"
         android:layout_width="wrap_content"
@@ -14,15 +14,15 @@
         android:layout_alignParentLeft="true"
         android:background="@drawable/image_bg"
         android:layout_marginRight="5dip">
- 
+
         <ImageView
             android:id="@+id/list_image"
             android:layout_width="50dip"
             android:layout_height="50dip"
             android:src="@drawable/ic_launcher"/>
- 
+
     </LinearLayout>
- 
+
     <!-- Title Of Song-->
     <TextView
         android:id="@+id/title"
@@ -38,7 +38,7 @@
  
     <!-- Artist Name -->
     <TextView
-        android:id="@+id/artist"
+        android:id="@+id/text"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/title"
@@ -50,7 +50,7 @@
  
     <!-- Rightend Duration -->
     <TextView
-        android:id="@+id/duration"
+        android:id="@+id/date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"

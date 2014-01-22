@@ -7,6 +7,7 @@ import java.util.List;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
+import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -29,12 +30,12 @@ public class MainActivity extends Activity {
 		listview = (ListView) findViewById(R.id.listview);
 
 		final ArrayList<NewsListItem> list = new ArrayList<NewsListItem>();
-		list.add(new NewsListItem("Name1", "Date1", "text1 text text text text text text text text text"));
-		list.add(new NewsListItem("Name2", "Date2", "text2 text text text text text text text text text"));
-		list.add(new NewsListItem("Name3", "Date3", "text3 text text text text text text text text text"));
-		list.add(new NewsListItem("Name4", "Date4", "text4 text text text text text text text text text"));
-		list.add(new NewsListItem("Name5", "Date5", "text5 text text text text text text text text text"));
-		list.add(new NewsListItem("Name6", "Date6", "text6 text text text text text text text text text"));
+		list.add(new NewsListItem("Name1", "Date1", "text1 text text text text text text texttext text text text text text texttext text text text text text texttext text text text text text text text text"));
+		list.add(new NewsListItem("Name2", "Date2", "text2 text text text text text text text text text text text text text text text text text text text text text text text text"));
+		list.add(new NewsListItem("Name3", "Date3", "text3 text text text text text text text text text text text text text text text text text text"));
+		list.add(new NewsListItem("Name4", "Date4", "text4 text text text text text text text text text text text text text text text text text text"));
+		list.add(new NewsListItem("Name5", "Date5", "text5 text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text"));
+		list.add(new NewsListItem("Name6", "Date6", "text6 text text text text text text text text text text text text text text text text text text text text text text text text text text text"));
 
 		final NewsArrayAdapter adapter = new NewsArrayAdapter(this, R.layout.listview_item, list);
 		listview.setAdapter(adapter);
@@ -45,12 +46,22 @@ public class MainActivity extends Activity {
 				Toast.makeText (getApplicationContext(), item.getName() + "\n" + item.getDate() + "\n" + item.getText(), Toast.LENGTH_LONG).show ();
 			}
 		});
+
+		String mPhoneNumber = getPhoneNumber();
+		if(mPhoneNumber != null){
+			Toast.makeText (getApplicationContext(), mPhoneNumber, Toast.LENGTH_LONG).show ();
+		}
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
+	}
+
+	private String getPhoneNumber(){
+		TelephonyManager tMgr =(TelephonyManager)this.getSystemService(Context.TELEPHONY_SERVICE);
+		return tMgr.getLine1Number();
 	}
 
 	private class NewsArrayAdapter extends ArrayAdapter<NewsListItem> {
@@ -91,16 +102,12 @@ public class MainActivity extends Activity {
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View vi=convertView;
 			if(convertView==null){
-				//vi = inflater.inflate(R.layout.listview_item, null);
 				vi = inflater.inflate(R.layout.row_item, null);
 			}
 
-//			TextView title = (TextView)vi.findViewById(R.id.nameLine);
-//			TextView date = (TextView)vi.findViewById(R.id.dateLine);
-//			TextView text = (TextView)vi.findViewById(R.id.textLine);
 			TextView title = (TextView)vi.findViewById(R.id.title);
-			TextView date = (TextView)vi.findViewById(R.id.duration);
-			TextView text = (TextView)vi.findViewById(R.id.artist);
+			TextView date = (TextView)vi.findViewById(R.id.date);
+			TextView text = (TextView)vi.findViewById(R.id.text);
 
 			NewsListItem it = data.get(position);
 			title.setText(it.getName());
