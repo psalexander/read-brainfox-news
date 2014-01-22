@@ -1,9 +1,20 @@
 package com.asinenko.brainfoxnews;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.StatusLine;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
@@ -22,14 +33,15 @@ import android.widget.Toast;
 public class MainActivity extends Activity {
 
 	private ListView listview;
-
+	private ArrayList<NewsListItem> list;
 	@Override
+
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		listview = (ListView) findViewById(R.id.listview);
 
-		final ArrayList<NewsListItem> list = new ArrayList<NewsListItem>();
+		list = new ArrayList<NewsListItem>();
 		list.add(new NewsListItem("Name1", "Date1", "text1 text text text text text text texttext text text text text text texttext text text text text text texttext text text text text text text text text"));
 		list.add(new NewsListItem("Name2", "Date2", "text2 text text text text text text text text text text text text text text text text text text text text text text text text"));
 		list.add(new NewsListItem("Name3", "Date3", "text3 text text text text text text text text text text text text text text text text text text"));
@@ -53,6 +65,25 @@ public class MainActivity extends Activity {
 		}
 	}
 
+	private String getHTTPPage(String url) throws ClientProtocolException, IOException{
+		HttpClient httpclient = new DefaultHttpClient();
+		HttpResponse response = httpclient.execute(new HttpGet(url));
+		StatusLine statusLine = response.getStatusLine();
+		String responseString = null;
+		if(statusLine.getStatusCode() == HttpStatus.SC_OK){
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			response.getEntity().writeTo(out);
+			out.close();
+			responseString = out.toString();
+			//more logic
+		} else{
+			//Closes the connection.
+			response.getEntity().getContent().close();
+			throw new IOException(statusLine.getReasonPhrase());
+		}
+		return responseString;
+	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);
@@ -62,6 +93,43 @@ public class MainActivity extends Activity {
 	private String getPhoneNumber(){
 		TelephonyManager tMgr =(TelephonyManager)this.getSystemService(Context.TELEPHONY_SERVICE);
 		return tMgr.getLine1Number();
+	}
+
+	//new RequestTask().execute("http://stackoverflow.com");
+	class RequestTask extends AsyncTask<String, String, String>{
+
+		String responseString = null;
+		@Override
+		protected String doInBackground(String... uri) {
+			HttpClient httpclient = new DefaultHttpClient();
+			HttpResponse response;
+			try {
+				response = httpclient.execute(new HttpGet(uri[0]));
+				StatusLine statusLine = response.getStatusLine();
+				if(statusLine.getStatusCode() == HttpStatus.SC_OK){
+					ByteArrayOutputStream out = new ByteArrayOutputStream();
+					response.getEntity().writeTo(out);
+					out.close();
+					responseString = out.toString();
+				} else{
+					//Closes the connection.
+					response.getEntity().getContent().close();
+					throw new IOException(statusLine.getReasonPhrase());
+				}
+			} catch (ClientProtocolException e) {
+				//TODO Handle problems..
+			} catch (IOException e) {
+				//TODO Handle problems..
+			}
+			return responseString;
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			super.onPostExecute(result);
+			//Do anything with response..
+			// парсим и обновляем список.
+		}
 	}
 
 	private class NewsArrayAdapter extends ArrayAdapter<NewsListItem> {
