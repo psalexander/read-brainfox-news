@@ -16,6 +16,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
@@ -40,8 +41,8 @@ public class MainActivity extends Activity {
 		listview.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
-//				final String item = (String) parent.getItemAtPosition(position);
-
+				final NewsListItem item = (NewsListItem) parent.getItemAtPosition(position);
+				Toast.makeText (getApplicationContext(), item.getName() + "\n" + item.getDate() + "\n" + item.getText(), Toast.LENGTH_LONG).show ();
 			}
 		});
 	}
@@ -82,14 +83,24 @@ public class MainActivity extends Activity {
 		}
 
 		@Override
+		public NewsListItem getItem(int position) {
+			return data.get(position);
+		}
+
+		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View vi=convertView;
-			if(convertView==null)
-				vi = inflater.inflate(R.layout.listview_item, null);
+			if(convertView==null){
+				//vi = inflater.inflate(R.layout.listview_item, null);
+				vi = inflater.inflate(R.layout.row_item, null);
+			}
 
-			TextView title = (TextView)vi.findViewById(R.id.nameLine);
-			TextView date = (TextView)vi.findViewById(R.id.dateLine);
-			TextView text = (TextView)vi.findViewById(R.id.textLine);
+//			TextView title = (TextView)vi.findViewById(R.id.nameLine);
+//			TextView date = (TextView)vi.findViewById(R.id.dateLine);
+//			TextView text = (TextView)vi.findViewById(R.id.textLine);
+			TextView title = (TextView)vi.findViewById(R.id.title);
+			TextView date = (TextView)vi.findViewById(R.id.duration);
+			TextView text = (TextView)vi.findViewById(R.id.artist);
 
 			NewsListItem it = data.get(position);
 			title.setText(it.getName());
