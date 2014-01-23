@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.http.HttpResponse;
@@ -13,12 +14,16 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -32,22 +37,88 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
+	// JSON Node names
+	private static final String TAG_ID = "id";
+	private static final String TAG_NAME = "name";
+	private static final String TAG_SHORTTEXT = "shorttext";
+	private static final String TAG_TIMESTAMP = "timestamp";
+	private static final String TAG_UTIME = "utime";
+	private static final String TAG_DATA = "data";
+	private static final String TAG_ERROR_CODE = "error_code";
+
+	JSONArray data = null;
+	ArrayList<HashMap<String, String>> dataList;
+	List<NewsListItem> listItems;
 	private ListView listview;
 	private ArrayList<NewsListItem> list;
-	@Override
+	Activity activity;
 
+	private void parseJSON(String jsonStr){
+		/*
+		 * {
+		 * 	"error_code":0,
+		 * 	"data":
+		 * 		[
+		 * 			{
+		 * 				"id":"4",
+		 * 				"name":null,
+		 * 				"shorttext":null,
+		 * 				"utime":"384555556",
+		 * 				"timestamp":"2014-01-22 08:54:14"
+		 * 			},
+		 * 			{
+		 * 				"id":"3",
+		 * 				"name":null,
+		 * 				"shorttext":null,
+		 * 				"utime":"384555555",
+		 * 				"timestamp":"2014-01-22 08:54:14"
+		 * 			}
+		 * 		]
+		 * }
+		 */
+		list.clear();
+		if (jsonStr != null) {
+			try {
+				JSONObject jsonObj = new JSONObject(jsonStr);
+
+				// Getting JSON Array node
+				String error = jsonObj.getString(TAG_ERROR_CODE);
+				data = jsonObj.getJSONArray(TAG_DATA);
+
+				// looping through All Contacts
+				for (int i = 0; i < data.length(); i++) {
+					JSONObject c = data.getJSONObject(i);
+
+					String id = c.getString(TAG_ID);
+					String name = c.getString(TAG_NAME);
+					String shorttext = c.getString(TAG_SHORTTEXT);
+					String timestamp = c.getString(TAG_TIMESTAMP);
+					String utime = c.getString(TAG_UTIME);
+
+					NewsListItem it = new NewsListItem(id, name, timestamp,shorttext);
+					list.add(it);
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		} else {
+			Log.e("ServiceHandler", "Couldn't get any data from the url");
+		}
+	}
+
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		listview = (ListView) findViewById(R.id.listview);
-
+		activity = this;
 		list = new ArrayList<NewsListItem>();
-		list.add(new NewsListItem("Name1", "Date1", "text1 text text text text text text texttext text text text text text texttext text text text text text texttext text text text text text text text text"));
-		list.add(new NewsListItem("Name2", "Date2", "text2 text text text text text text text text text text text text text text text text text text text text text text text text"));
-		list.add(new NewsListItem("Name3", "Date3", "text3 text text text text text text text text text text text text text text text text text text"));
-		list.add(new NewsListItem("Name4", "Date4", "text4 text text text text text text text text text text text text text text text text text text"));
-		list.add(new NewsListItem("Name5", "Date5", "text5 text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text"));
-		list.add(new NewsListItem("Name6", "Date6", "text6 text text text text text text text text text text text text text text text text text text text text text text text text text text text"));
+//		list.add(new NewsListItem("7", "Name1", "Date1", "text1 text text text text text text texttext text text text text text texttext text text text text text texttext text text text text text text text text"));
+//		list.add(new NewsListItem("8", "Name2", "Date2", "text2 text text text text text text text text text text text text text text text text text text text text text text text text"));
+//		list.add(new NewsListItem("9", "Name3", "Date3", "text3 text text text text text text text text text text text text text text text text text text"));
+//		list.add(new NewsListItem("10", "Name4", "Date4", "text4 text text text text text text text text text text text text text text text text text text"));
+//		list.add(new NewsListItem("11", "Name5", "Date5", "text5 text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text"));
+//		list.add(new NewsListItem("12", "Name6", "Date6", "text6 text text text text text text text text text text text text text text text text text text text text text text text text text text text"));
 
 		final NewsArrayAdapter adapter = new NewsArrayAdapter(this, R.layout.listview_item, list);
 		listview.setAdapter(adapter);
@@ -63,6 +134,10 @@ public class MainActivity extends Activity {
 		if(mPhoneNumber != null){
 			Toast.makeText (getApplicationContext(), mPhoneNumber, Toast.LENGTH_LONG).show ();
 		}
+
+		dataList = new ArrayList<HashMap<String, String>>();
+		listItems = new LinkedList<NewsListItem>();
+		new RequestTask().execute("http://baklikov.ru/ttt.php?action=list");
 	}
 
 	private String getHTTPPage(String url) throws ClientProtocolException, IOException{
@@ -121,6 +196,7 @@ public class MainActivity extends Activity {
 			} catch (IOException e) {
 				//TODO Handle problems..
 			}
+			parseJSON(responseString);
 			return responseString;
 		}
 
@@ -129,6 +205,16 @@ public class MainActivity extends Activity {
 			super.onPostExecute(result);
 			//Do anything with response..
 			// парсим и обновляем список.
+
+			final NewsArrayAdapter adapter = new NewsArrayAdapter(activity, R.layout.listview_item, list);
+			listview.setAdapter(adapter);
+			listview.setOnItemClickListener(new OnItemClickListener() {
+				@Override
+				public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
+					final NewsListItem item = (NewsListItem) parent.getItemAtPosition(position);
+					Toast.makeText (getApplicationContext(), item.getName() + "\n" + item.getDate() + "\n" + item.getText(), Toast.LENGTH_LONG).show ();
+				}
+			});
 		}
 	}
 
