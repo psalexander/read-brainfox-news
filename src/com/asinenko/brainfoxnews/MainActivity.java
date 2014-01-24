@@ -26,6 +26,7 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -41,9 +42,10 @@ public class MainActivity extends Activity {
 	private static final String TAG_ID = "id";
 	private static final String TAG_NAME = "name";
 	private static final String TAG_SHORTTEXT = "shorttext";
-	private static final String TAG_TIMESTAMP = "timestamp";
+	private static final String TAG_TIMESTAMP = "ts";
 	private static final String TAG_UTIME = "utime";
 	private static final String TAG_DATA = "data";
+	private static final String TAG_DATE = "date";
 	private static final String TAG_ERROR_CODE = "error_code";
 
 	JSONArray data = null;
@@ -57,21 +59,20 @@ public class MainActivity extends Activity {
 		/*
 		 * {
 		 * 	"error_code":0,
+		 * "ts":23142340,
 		 * 	"data":
 		 * 		[
 		 * 			{
 		 * 				"id":"4",
 		 * 				"name":null,
 		 * 				"shorttext":null,
-		 * 				"utime":"384555556",
-		 * 				"timestamp":"2014-01-22 08:54:14"
+		 * 				"date":"2014-01-22 08:54:14"
 		 * 			},
 		 * 			{
 		 * 				"id":"3",
 		 * 				"name":null,
 		 * 				"shorttext":null,
-		 * 				"utime":"384555555",
-		 * 				"timestamp":"2014-01-22 08:54:14"
+		 * 				"date":"2014-01-22 08:54:14"
 		 * 			}
 		 * 		]
 		 * }
@@ -84,7 +85,7 @@ public class MainActivity extends Activity {
 				// Getting JSON Array node
 				String error = jsonObj.getString(TAG_ERROR_CODE);
 				data = jsonObj.getJSONArray(TAG_DATA);
-
+				String timestamp = jsonObj.getString(TAG_TIMESTAMP);
 				// looping through All Contacts
 				for (int i = 0; i < data.length(); i++) {
 					JSONObject c = data.getJSONObject(i);
@@ -92,10 +93,10 @@ public class MainActivity extends Activity {
 					String id = c.getString(TAG_ID);
 					String name = c.getString(TAG_NAME);
 					String shorttext = c.getString(TAG_SHORTTEXT);
-					String timestamp = c.getString(TAG_TIMESTAMP);
-					String utime = c.getString(TAG_UTIME);
+					String date = c.getString(TAG_DATE);
+				//	String utime = c.getString(TAG_UTIME);
 
-					NewsListItem it = new NewsListItem(id, name, timestamp,shorttext);
+					NewsListItem it = new NewsListItem(id, name, date,shorttext);
 					list.add(it);
 				}
 			} catch (JSONException e) {
@@ -169,6 +170,19 @@ public class MainActivity extends Activity {
 		TelephonyManager tMgr =(TelephonyManager)this.getSystemService(Context.TELEPHONY_SERVICE);
 		return tMgr.getLine1Number();
 	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_refresh:
+			new RequestTask().execute("http://baklikov.ru/ttt.php?action=list");
+			break;
+		default:
+			break;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
 
 	//new RequestTask().execute("http://stackoverflow.com");
 	class RequestTask extends AsyncTask<String, String, String>{
