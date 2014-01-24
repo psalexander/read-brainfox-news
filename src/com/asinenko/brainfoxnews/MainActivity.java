@@ -33,6 +33,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,7 +54,8 @@ public class MainActivity extends Activity {
 	List<NewsListItem> listItems;
 	private ListView listview;
 	private ArrayList<NewsListItem> list;
-	Activity activity;
+	private Activity activity;
+	private ProgressBar progressBar;
 
 	private void parseJSON(String jsonStr){
 		/*
@@ -112,6 +114,9 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		listview = (ListView) findViewById(R.id.listview);
+		progressBar = (ProgressBar) findViewById(R.id.progressBarDownload);
+		progressBar.setVisibility(ProgressBar.INVISIBLE);
+
 		activity = this;
 		list = new ArrayList<NewsListItem>();
 //		list.add(new NewsListItem("7", "Name1", "Date1", "text1 text text text text text text texttext text text text text text texttext text text text text text texttext text text text text text text text text"));
@@ -187,6 +192,13 @@ public class MainActivity extends Activity {
 	//new RequestTask().execute("http://stackoverflow.com");
 	class RequestTask extends AsyncTask<String, String, String>{
 
+		@Override
+		protected void onPreExecute() {
+			// TODO Auto-generated method stub
+			super.onPreExecute();
+			progressBar.setVisibility(ProgressBar.VISIBLE);
+		}
+
 		String responseString = null;
 		@Override
 		protected String doInBackground(String... uri) {
@@ -229,6 +241,7 @@ public class MainActivity extends Activity {
 					Toast.makeText (getApplicationContext(), item.getName() + "\n" + item.getDate() + "\n" + item.getText(), Toast.LENGTH_LONG).show ();
 				}
 			});
+			progressBar.setVisibility(ProgressBar.INVISIBLE);
 		}
 	}
 
