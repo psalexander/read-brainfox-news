@@ -22,6 +22,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.res.Configuration;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -126,24 +128,14 @@ public class MainActivity extends Activity {
 //		list.add(new NewsListItem("11", "Name5", "Date5", "text5 text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text"));
 //		list.add(new NewsListItem("12", "Name6", "Date6", "text6 text text text text text text text text text text text text text text text text text text text text text text text text text text text"));
 
-		final NewsArrayAdapter adapter = new NewsArrayAdapter(this, R.layout.listview_item, list);
-		listview.setAdapter(adapter);
-		listview.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
-				final NewsListItem item = (NewsListItem) parent.getItemAtPosition(position);
-				Toast.makeText (getApplicationContext(), item.getName() + "\n" + item.getDate() + "\n" + item.getText(), Toast.LENGTH_LONG).show ();
-			}
-		});
-
-		String mPhoneNumber = getPhoneNumber();
-		if(mPhoneNumber != null){
-			Toast.makeText (getApplicationContext(), mPhoneNumber, Toast.LENGTH_LONG).show ();
-		}
-
 		dataList = new ArrayList<HashMap<String, String>>();
 		listItems = new LinkedList<NewsListItem>();
 		new RequestTask().execute("http://baklikov.ru/ttt.php?action=list");
+	}
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
 	}
 
 	private String getHTTPPage(String url) throws ClientProtocolException, IOException{
@@ -182,12 +174,17 @@ public class MainActivity extends Activity {
 		case R.id.action_refresh:
 			new RequestTask().execute("http://baklikov.ru/ttt.php?action=list");
 			break;
+		case R.id.action_start_sevice:
+			
+			break;
+		case R.id.action_stop_sevice:
+			
+			break;
 		default:
 			break;
 		}
 		return super.onOptionsItemSelected(item);
 	}
-
 
 	//new RequestTask().execute("http://stackoverflow.com");
 	class RequestTask extends AsyncTask<String, String, String>{
@@ -238,7 +235,13 @@ public class MainActivity extends Activity {
 				@Override
 				public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
 					final NewsListItem item = (NewsListItem) parent.getItemAtPosition(position);
-					Toast.makeText (getApplicationContext(), item.getName() + "\n" + item.getDate() + "\n" + item.getText(), Toast.LENGTH_LONG).show ();
+					Intent intent = new Intent(MainActivity.this, NewsActivity.class);
+					intent.putExtra("title", item.getName());
+					intent.putExtra("short", item.getText());
+					intent.putExtra("id", item.getId());
+					intent.putExtra("date", item.getDate());
+					startActivity(intent);
+					//Toast.makeText (getApplicationContext(), item.getName() + "\n" + item.getDate() + "\n" + item.getText(), Toast.LENGTH_LONG).show ();
 				}
 			});
 			progressBar.setVisibility(ProgressBar.INVISIBLE);
