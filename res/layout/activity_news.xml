@@ -30,10 +30,11 @@
             android:text="Medium Text"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        <ScrollView 
+        <ScrollView
             android:layout_width="fill_parent"
-            android:layout_height="150px"
-            android:scrollbarStyle="insideOverlay">
+            android:layout_height="0dp"
+            android:scrollbarStyle="insideOverlay" >
+
             <LinearLayout
                 android:id="@+id/imageLayout"
                 android:orientation="horizontal"
@@ -61,5 +62,13 @@
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
     </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true" />
 
 </RelativeLayout>
