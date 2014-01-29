@@ -2,9 +2,13 @@ package com.asinenko.brainfoxnews;
 
 public class NewsSQLItem {
 	private String id;
+	private String dbId;
 	private String title;
 	private String shorttext;
 	private String date;
+	private String type;
+	private String image;
+
 	public String getId() {
 		return id;
 	}
@@ -29,5 +33,22 @@ public class NewsSQLItem {
 	public void setDate(String date) {
 		this.date = date;
 	}
-	
+	public String getDbId() {
+		return dbId;
+	}
+	public void setDbId(String dbId) {
+		this.dbId = dbId;
+	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+	public String getImage() {
+		return image;
+	}
+	public void setImage(String image) {
+		this.image = image;
+	}
 }
