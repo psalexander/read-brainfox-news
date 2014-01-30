@@ -98,7 +98,6 @@ public class MainActivity extends Activity {
 					String name = c.getString(TAG_NAME);
 					String shorttext = c.getString(TAG_SHORTTEXT);
 					String date = c.getString(TAG_DATE);
-				//	String utime = c.getString(TAG_UTIME);
 
 					NewsListItem it = new NewsListItem(id, name, date,shorttext);
 					list.add(it);
@@ -138,25 +137,6 @@ public class MainActivity extends Activity {
 		super.onConfigurationChanged(newConfig);
 	}
 
-	private String getHTTPPage(String url) throws ClientProtocolException, IOException{
-		HttpClient httpclient = new DefaultHttpClient();
-		HttpResponse response = httpclient.execute(new HttpGet(url));
-		StatusLine statusLine = response.getStatusLine();
-		String responseString = null;
-		if(statusLine.getStatusCode() == HttpStatus.SC_OK){
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			response.getEntity().writeTo(out);
-			out.close();
-			responseString = out.toString();
-			//more logic
-		} else{
-			//Closes the connection.
-			response.getEntity().getContent().close();
-			throw new IOException(statusLine.getReasonPhrase());
-		}
-		return responseString;
-	}
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);
@@ -186,12 +166,10 @@ public class MainActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	//new RequestTask().execute("http://stackoverflow.com");
 	class RequestTask extends AsyncTask<String, String, String>{
 
 		@Override
 		protected void onPreExecute() {
-			// TODO Auto-generated method stub
 			super.onPreExecute();
 			progressBar.setVisibility(ProgressBar.VISIBLE);
 		}
@@ -235,10 +213,11 @@ public class MainActivity extends Activity {
 				@Override
 				public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
 					final NewsListItem item = (NewsListItem) parent.getItemAtPosition(position);
+
 					Intent intent = new Intent(MainActivity.this, NewsActivity.class);
+					intent.putExtra("newsid", item.getId());
 					intent.putExtra("title", item.getName());
 					intent.putExtra("short", item.getText());
-					intent.putExtra("id", item.getId());
 					intent.putExtra("date", item.getDate());
 					startActivity(intent);
 					//Toast.makeText (getApplicationContext(), item.getName() + "\n" + item.getDate() + "\n" + item.getText(), Toast.LENGTH_LONG).show ();
