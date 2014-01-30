@@ -24,7 +24,7 @@
 
 ## Одна новость:
 
-/ttt.php?action=news&id=34234
+/ttt.php?action=details&id=34234
 
 <pre>
 {"error_code":0, "images" : [1,2,3,4], "id":"4", "name":"News4", "shorttext":"ShortNews4", "text" : "FullText4", "date":"09.03.1982 23:59:16"} }
