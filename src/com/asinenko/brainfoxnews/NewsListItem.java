@@ -6,7 +6,7 @@ public class NewsListItem {
 	private String date;
 	private String text;
 	public NewsListItem(String id, String name, String date, String text) {
-		super();
+		this.id = id;
 		this.name = name;
 		this.date = date;
 		this.text = text;
