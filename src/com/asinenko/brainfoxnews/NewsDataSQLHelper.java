@@ -24,7 +24,7 @@ public class NewsDataSQLHelper extends SQLiteOpenHelper{
 	//News table
 	public static final String TABLE_NEWS = "news";
 	public static final String NEWS_COLUMN_ID = "_id";		// integer
-	public static final String NEWS_COLUMN_DB_ID = "_id";
+	public static final String NEWS_COLUMN_DB_ID = "dbid";
 	public static final String NEWS_COLUMN_TITLE = "title";	// real
 	public static final String NEWS_COLUMN_SHORTTEXT = "shorttext";	// real
 	public static final String NEWS_COLUMN_DATE = "date";	// real
@@ -40,7 +40,7 @@ public class NewsDataSQLHelper extends SQLiteOpenHelper{
 			+ NEWS_COLUMN_TYPE + " text, "
 			+ NEWS_COLUMN_IMAGE + " text);";
 
-	public NewsDataSQLHelper(Context context, String name, CursorFactory factory, int version) {
+	public NewsDataSQLHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
 
