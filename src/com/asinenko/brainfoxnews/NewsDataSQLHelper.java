@@ -23,17 +23,17 @@ public class NewsDataSQLHelper extends SQLiteOpenHelper{
 
 	//News table
 	public static final String TABLE_NEWS = "news";
-	public static final String NEWS_COLUMN_ID = "_id";		// integer
+	public static final String NEWS_COLUMN_ID = "_id";
 	public static final String NEWS_COLUMN_DB_ID = "dbid";
-	public static final String NEWS_COLUMN_TITLE = "title";	// real
-	public static final String NEWS_COLUMN_SHORTTEXT = "shorttext";	// real
-	public static final String NEWS_COLUMN_DATE = "date";	// real
-	public static final String NEWS_COLUMN_TYPE = "type";	// real
-	public static final String NEWS_COLUMN_IMAGE = "image";	// real
+	public static final String NEWS_COLUMN_TITLE = "title";
+	public static final String NEWS_COLUMN_SHORTTEXT = "shorttext";
+	public static final String NEWS_COLUMN_DATE = "date";
+	public static final String NEWS_COLUMN_TYPE = "type";
+	public static final String NEWS_COLUMN_IMAGE = "image";
 	
 	private static final String DATABASE_CREATE_NEWS = "create table "
 			+ TABLE_NEWS + "(" + NEWS_COLUMN_ID + " integer primary key autoincrement, "
-			+ NEWS_COLUMN_DB_ID + " real, "
+			+ NEWS_COLUMN_DB_ID + " integer, "
 			+ NEWS_COLUMN_TITLE + " text not null, "
 			+ NEWS_COLUMN_SHORTTEXT + " text not null, "
 			+ NEWS_COLUMN_DATE + " text not null, "
@@ -56,5 +56,4 @@ public class NewsDataSQLHelper extends SQLiteOpenHelper{
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_NEWS);
 		onCreate(db);
 	}
-
 }
