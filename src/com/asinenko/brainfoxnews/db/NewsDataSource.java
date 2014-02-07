@@ -83,4 +83,9 @@ public class NewsDataSource {
 		item.setImage(cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.NEWS_COLUMN_IMAGE)));
 		return item;
 	}
+
+	public Cursor getNewsCursor(){
+		Cursor cursor = database.query(NewsDataSQLHelper.TABLE_NEWS, allNewsColumns, null, null, null, null, null);
+		return cursor;
+	}
 }

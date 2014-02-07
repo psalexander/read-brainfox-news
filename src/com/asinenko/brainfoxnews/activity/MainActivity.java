@@ -19,17 +19,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.asinenko.brainfoxnews.R;
-import com.asinenko.brainfoxnews.R.id;
-import com.asinenko.brainfoxnews.R.layout;
-import com.asinenko.brainfoxnews.R.menu;
+import com.asinenko.brainfoxnews.db.NewsDataSQLHelper;
+import com.asinenko.brainfoxnews.db.NewsDataSource;
 import com.asinenko.brainfoxnews.items.NewsListItem;
+import com.asinenko.brainfoxnews.items.NewsSQLItem;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -42,6 +42,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,7 +65,8 @@ public class MainActivity extends Activity {
 	private ArrayList<NewsListItem> list;
 	private Activity activity;
 	private ProgressBar progressBar;
-
+	ClientCursorAdapter cursorAdapter;
+	NewsDataSource dataSources;
 	private void parseJSON(String jsonStr){
 		/*
 		 * {
@@ -91,7 +93,6 @@ public class MainActivity extends Activity {
 		if (jsonStr != null) {
 			try {
 				JSONObject jsonObj = new JSONObject(jsonStr);
-
 				// Getting JSON Array node
 				String error = jsonObj.getString(TAG_ERROR_CODE);
 				data = jsonObj.getJSONArray(TAG_DATA);
@@ -99,12 +100,10 @@ public class MainActivity extends Activity {
 				// looping through All Contacts
 				for (int i = 0; i < data.length(); i++) {
 					JSONObject c = data.getJSONObject(i);
-
 					String id = c.getString(TAG_ID);
 					String name = c.getString(TAG_NAME);
 					String shorttext = c.getString(TAG_SHORTTEXT);
 					String date = c.getString(TAG_DATE);
-
 					NewsListItem it = new NewsListItem(id, name, date,shorttext);
 					list.add(it);
 				}
@@ -115,7 +114,7 @@ public class MainActivity extends Activity {
 			Log.e("ServiceHandler", "Couldn't get any data from the url");
 		}
 	}
-
+	Cursor cursor;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -126,12 +125,29 @@ public class MainActivity extends Activity {
 
 		activity = this;
 		list = new ArrayList<NewsListItem>();
-//		list.add(new NewsListItem("7", "Name1", "Date1", "text1 text text text text text text texttext text text text text text texttext text text text text text texttext text text text text text text text text"));
-//		list.add(new NewsListItem("8", "Name2", "Date2", "text2 text text text text text text text text text text text text text text text text text text text text text text text text"));
-//		list.add(new NewsListItem("9", "Name3", "Date3", "text3 text text text text text text text text text text text text text text text text text text"));
-//		list.add(new NewsListItem("10", "Name4", "Date4", "text4 text text text text text text text text text text text text text text text text text text"));
-//		list.add(new NewsListItem("11", "Name5", "Date5", "text5 text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text"));
-//		list.add(new NewsListItem("12", "Name6", "Date6", "text6 text text text text text text text text text text text text text text text text text text text text text text text text text text text"));
+
+		dataSources = new NewsDataSource(activity);
+		dataSources.open();
+		cursor = dataSources.getNewsCursor();
+		cursorAdapter = new ClientCursorAdapter(activity, R.layout.listview_item, cursor, 0);
+		listview.setAdapter(cursorAdapter);
+		listview.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
+				Cursor cursor = (Cursor) listview.getItemAtPosition(position);
+				String countryCode = cursor.getString(cursor.getColumnIndexOrThrow(NewsDataSQLHelper.NEWS_COLUMN_DB_ID));
+				Toast.makeText(getApplicationContext(), countryCode, Toast.LENGTH_SHORT).show();
+
+//				final NewsListItem item = (NewsListItem) parent.getItemAtPosition(position);
+//				Intent intent = new Intent(MainActivity.this, NewsActivity.class);
+//				intent.putExtra("newsid", item.getId());
+//				intent.putExtra("title", item.getName());
+//				intent.putExtra("short", item.getText());
+//				intent.putExtra("date", item.getDate());
+//				startActivity(intent);
+//				//Toast.makeText (getApplicationContext(), item.getName() + "\n" + item.getDate() + "\n" + item.getText(), Toast.LENGTH_LONG).show ();
+			}
+		});
 
 		dataList = new ArrayList<HashMap<String, String>>();
 		listItems = new LinkedList<NewsListItem>();
@@ -199,9 +215,9 @@ public class MainActivity extends Activity {
 					throw new IOException(statusLine.getReasonPhrase());
 				}
 			} catch (ClientProtocolException e) {
-				//TODO Handle problems..
+				//TODO Handle problems
 			} catch (IOException e) {
-				//TODO Handle problems..
+				//TODO Handle problems
 			}
 			parseJSON(responseString);
 			return responseString;
@@ -210,26 +226,71 @@ public class MainActivity extends Activity {
 		@Override
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
-			//Do anything with response..
-			// парсим и обновляем список.
+			//Do anything with response
+			// парсим и обновляем список
+			Toast.makeText(getApplicationContext(), String.valueOf(list.size()), Toast.LENGTH_SHORT).show();
+			for (NewsListItem it : list) {
+				NewsSQLItem n = new NewsSQLItem();
+				n.setDbId(it.getId());
+				n.setDate(it.getDate());
+				n.setTitle(it.getName());
+				n.setShorttext(it.getText());
+				dataSources.createNewsItem(n);
+			}
+			//listview.invalidateViews();
 
-			final NewsArrayAdapter adapter = new NewsArrayAdapter(activity, R.layout.listview_item, list);
-			listview.setAdapter(adapter);
-			listview.setOnItemClickListener(new OnItemClickListener() {
-				@Override
-				public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
-					final NewsListItem item = (NewsListItem) parent.getItemAtPosition(position);
-
-					Intent intent = new Intent(MainActivity.this, NewsActivity.class);
-					intent.putExtra("newsid", item.getId());
-					intent.putExtra("title", item.getName());
-					intent.putExtra("short", item.getText());
-					intent.putExtra("date", item.getDate());
-					startActivity(intent);
-					//Toast.makeText (getApplicationContext(), item.getName() + "\n" + item.getDate() + "\n" + item.getText(), Toast.LENGTH_LONG).show ();
-				}
-			});
+			//listview.refreshDrawableState();
+			cursor.requery();
+			cursorAdapter.notifyDataSetChanged();
+//			final NewsArrayAdapter adapter = new NewsArrayAdapter(activity, R.layout.listview_item, list);
+//			listview.setAdapter(adapter);
+//			listview.setOnItemClickListener(new OnItemClickListener() {
+//				@Override
+//				public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
+//					final NewsListItem item = (NewsListItem) parent.getItemAtPosition(position);
+//
+//					Intent intent = new Intent(MainActivity.this, NewsActivity.class);
+//					intent.putExtra("newsid", item.getId());
+//					intent.putExtra("title", item.getName());
+//					intent.putExtra("short", item.getText());
+//					intent.putExtra("date", item.getDate());
+//					startActivity(intent);
+//					//Toast.makeText (getApplicationContext(), item.getName() + "\n" + item.getDate() + "\n" + item.getText(), Toast.LENGTH_LONG).show ();
+//				}
+//			});
 			progressBar.setVisibility(ProgressBar.INVISIBLE);
+		}
+	}
+
+	public class ClientCursorAdapter extends ResourceCursorAdapter {
+		private LayoutInflater inflater=null;
+		private Cursor mCursor;
+		private Context mContext;
+
+		public ClientCursorAdapter(Context context, int layout, Cursor c, int flags) {
+			super(context, layout, c, flags);
+			inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			mCursor = c;
+			mContext = context;
+		}
+		@Override
+		public View newView(Context context, Cursor cursor, ViewGroup parent) {
+			return inflater.inflate(R.layout.row_item, parent, false);
+		}
+
+		@Override
+		public void bindView(View view, Context context, Cursor cursor) {
+			TextView title = (TextView)view.findViewById(R.id.title);
+			TextView date = (TextView)view.findViewById(R.id.date);
+			TextView text = (TextView)view.findViewById(R.id.text);
+			TextView id = (TextView)view.findViewById(R.id.id);
+			if(cursor != null){
+				title.setText(cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.NEWS_COLUMN_TITLE)));
+				date.setText(cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.NEWS_COLUMN_DATE)));
+				text.setText(cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.NEWS_COLUMN_SHORTTEXT)));
+				id.setText(cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.NEWS_COLUMN_DB_ID)));
+			}
+			notifyDataSetChanged();
 		}
 	}
 

@@ -34,7 +34,6 @@ import android.content.Context;
 import android.database.DataSetObserver;
 import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
@@ -42,7 +41,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.Scroller;
-import android.widget.Toast;
 
 public class HorizontalListView extends AdapterView<ListAdapter> {
 
@@ -142,16 +140,6 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
 	public void setSelection(int position) {
 
 	}
-//
-//	@Override
-//	protected void measureChild(View child, int parentWidthMeasureSpec, int parentHeightMeasureSpec) {
-//		//super.measureChild(child, parentWidthMeasureSpec, parentHeightMeasureSpec);
-//		LayoutParams params = child.getLayoutParams();
-//		if(params == null) {
-//			params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-//		}
-//		child.measure(MeasureSpec.makeMeasureSpec(getWidth(), MeasureSpec.AT_MOST), MeasureSpec.makeMeasureSpec(getHeight(), MeasureSpec.AT_MOST));
-//	}
 
 	private void addAndMeasureChild(final View child, int viewPos) {
 		LayoutParams params = child.getLayoutParams();
@@ -162,8 +150,8 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
 		addViewInLayout(child, viewPos, params, true);
 		child.measure(MeasureSpec.makeMeasureSpec(getWidth(), MeasureSpec.AT_MOST), MeasureSpec.makeMeasureSpec(getHeight(), MeasureSpec.AT_MOST));
 //		child.measure(getWidth(), getHeight());
-	//	child.measure(MeasureSpec.makeMeasureSpec(getWidth(), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(getHeight(), MeasureSpec.EXACTLY));
-		//child.measure(MeasureSpec.makeMeasureSpec(getWidth(), MeasureSpec.UNSPECIFIED), MeasureSpec.makeMeasureSpec(getHeight(), MeasureSpec.UNSPECIFIED));
+//		child.measure(MeasureSpec.makeMeasureSpec(getWidth(), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(getHeight(), MeasureSpec.EXACTLY));
+//		child.measure(MeasureSpec.makeMeasureSpec(getWidth(), MeasureSpec.UNSPECIFIED), MeasureSpec.makeMeasureSpec(getHeight(), MeasureSpec.UNSPECIFIED));
 	}
 
 	@Override
@@ -173,7 +161,6 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
 		if(mAdapter == null){
 			return;
 		}
-
 		if(mDataChanged){
 			int oldCurrentX = mCurrentX;
 			initView();
@@ -181,12 +168,10 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
 			mNextX = oldCurrentX;
 			mDataChanged = false;
 		}
-
 		if(mScroller.computeScrollOffset()){
 			int scrollx = mScroller.getCurrX();
 			mNextX = scrollx;
 		}
-
 		if(mNextX <= 0){
 			mNextX = 0;
 			mScroller.forceFinished(true);
@@ -219,7 +204,6 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
 			edge = child.getRight();
 		}
 		fillListRight(edge, dx);
-
 		edge = 0;
 		child = getChildAt(0);
 		if(child != null) {
@@ -233,7 +217,6 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
 			View child = mAdapter.getView(mRightViewIndex, mRemovedViewQueue.poll(), this);
 			addAndMeasureChild(child, -1);
 			rightEdge += child.getMeasuredWidth();
-
 			if(mRightViewIndex == mAdapter.getCount()-1) {
 				mMaxX = mCurrentX + rightEdge - getWidth();
 			}
@@ -263,7 +246,6 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
 			mLeftViewIndex++;
 			child = getChildAt(0);
 		}
-
 		child = getChildAt(getChildCount()-1);
 		while(child != null && child.getLeft() + dx >= getWidth()) {
 			mRemovedViewQueue.offer(child);
@@ -312,6 +294,7 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
 	}
 
 	private OnGestureListener mOnGesture = new GestureDetector.SimpleOnGestureListener() {
+
 		@Override
 		public boolean onDown(MotionEvent e) {
 			return HorizontalListView.this.onDown(e);
@@ -350,7 +333,6 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
 
 		@Override
 		public void onLongPress(MotionEvent e) {
-			Toast.makeText(context, "asdfsdfsdfsdfs", 10000);
 			int childCount = getChildCount();
 			for (int i = 0; i < childCount; i++) {
 				View child = getChildAt(i);

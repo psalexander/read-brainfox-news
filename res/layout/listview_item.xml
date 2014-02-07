@@ -39,4 +39,5 @@
         android:text="Example application"
         android:textSize="14sp" />
     </LinearLayout>
+
 </RelativeLayout>
