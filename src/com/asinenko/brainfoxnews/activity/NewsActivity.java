@@ -1,7 +1,10 @@
-package com.asinenko.brainfoxnews;
+package com.asinenko.brainfoxnews.activity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -14,14 +17,24 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.asinenko.brainfoxnews.HorizontalListView;
+import com.asinenko.brainfoxnews.LazyAdapter;
+import com.asinenko.brainfoxnews.R;
+
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Context;
 import android.content.res.Configuration;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
-import android.widget.LinearLayout;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class NewsActivity extends Activity {
@@ -32,12 +45,17 @@ public class NewsActivity extends Activity {
 	private static final String TAG_DATE = "date";
 	private static final String TAG_ERROR_CODE = "error_code";
 	private static final String TAG_IMAGES = "images";
+	
+	private static final String IMAGE_URL = "http://baklikov.ru/ttt.php?action=image&id=";//16&h=150";
+
+	//private MyListView listView;
+	private HorizontalListView listView;
 
 	private TextView titleTextView;
 	private TextView shortTextView;
 	private TextView mainTextView;
 	private TextView dateTextView;
-	private LinearLayout imageLayout;
+	//private LinearLayout imageLayout;
 	private ProgressBar progressBar;
 
 	private String id;
@@ -49,20 +67,25 @@ public class NewsActivity extends Activity {
 
 	String error;
 	JSONArray data = null;
+	ImagesArrayAdapter adapter;
 
+	Activity activity;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_news);
-
+		activity = this;
+		//listView = (MyListView)findViewById(R.id.imageListView);
+		listView = (HorizontalListView) findViewById(R.id.imageListView);
+		
 		titleTextView = (TextView)findViewById(R.id.titleTextView);
 		shortTextView = (TextView)findViewById(R.id.shortTextView);
 		mainTextView = (TextView)findViewById(R.id.mainTextView);
 		dateTextView = (TextView)findViewById(R.id.dateTextView);
 		progressBar = (ProgressBar)findViewById(R.id.progressBar);
 		progressBar.setVisibility(ProgressBar.INVISIBLE);
-		imageLayout = (LinearLayout)findViewById(R.id.imageLayout);
-//		imageLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,200));
+	//	imageLayout = (LinearLayout)findViewById(R.id.imageLayout);
+	//	imageLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,150));
 
 		id = getIntent().getExtras().getString("newsid");
 		title = getIntent().getExtras().getString("title");
@@ -71,10 +94,31 @@ public class NewsActivity extends Activity {
 
 		new RequestTask().execute("http://baklikov.ru/ttt.php?action=details&id=" + id);
 
+//		adapter = new ImagesArrayAdapter(this, R.layout.image_item, new LinkedList<ImageView>());
+
+//		listView.setAdapter(adapter);
+//		listView.setOnItemClickListener(new OnItemClickListener() {
+//			@Override
+//			public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
+////				final NewsListItem item = (NewsListItem) parent.getItemAtPosition(position);
+////
+////				Intent intent = new Intent(MainActivity.this, NewsActivity.class);
+////				intent.putExtra("newsid", item.getId());
+////				intent.putExtra("title", item.getName());
+////				intent.putExtra("short", item.getText());
+////				intent.putExtra("date", item.getDate());
+////				startActivity(intent);
+//				//Toast.makeText (getApplicationContext(), item.getName() + "\n" + item.getDate() + "\n" + item.getText(), Toast.LENGTH_LONG).show ();
+//			}
+//		});
+		
+		//listView.setAdapter(adapter);
 //		ImageView im2 = new ImageView(this);
 //		im2.setImageResource(R.drawable.marcell_sebestyen);
 //		imageLayout.addView(im2);
 	}
+
+	List<String> imageList = new LinkedList<String>();
 
 	private void parseJSON(String jsonStr){
 //	{
@@ -86,6 +130,7 @@ public class NewsActivity extends Activity {
 //		"images":[2,3,14]
 //	}
 
+
 		if (jsonStr != null) {
 			try {
 				JSONObject jsonObj = new JSONObject(jsonStr);
@@ -95,16 +140,20 @@ public class NewsActivity extends Activity {
 				mainText = jsonObj.getString(TAG_DATA);
 				date = jsonObj.getString(TAG_DATE);
 				data = jsonObj.getJSONArray(TAG_IMAGES);
+				Log.w("1113333333111111", data.toString());
+				imageList.clear();
 
-//				for (int i = 0; i < data.length(); i++) {
-//					JSONObject c = data.getJSONObject(i);
+				for (int i = 0; i < data.length(); i++) {
+					//JSONObject c = data.getJSONObject(i);
+
+					imageList.add(String.valueOf(data.getInt(i)));
 //					String id = c.getString(TAG_ID);
 //					String name = c.getString(TAG_NAME);
 //					String shorttext = c.getString(TAG_SHORTTEXT);
 //					String date = c.getString(TAG_DATE);
 //					NewsListItem it = new NewsListItem(id, name, date,shorttext);
 //					list.add(it);
-//				}
+				}
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
@@ -155,6 +204,30 @@ public class NewsActivity extends Activity {
 			shortTextView.setText(firsttext);
 			mainTextView.setText(mainText);
 			dateTextView.setText(date);
+			List<String> list = new ArrayList<String>();
+			for(int i = 0; i < imageList.size(); i++){
+				String id = imageList.get(i);
+				//ImageView v = new ImageView(getApplicationContext());
+			//	adapter.add(v);
+				//RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, 150);
+			//	v.setLayoutParams(params);
+
+				//imageLayout.addView(v);
+				String url = IMAGE_URL + id + "&h=300";
+				list.add(url);
+				//ImageManager.fetchImage(url, v);
+				//Log.w("11111111111", String.valueOf(v.getDrawingCache().getHeight()));
+
+				
+			}
+
+			//String asd[];
+			//list.toArray(asd);
+			String[] array = list.toArray(new String[list.size()]);
+			final LazyAdapter ladapter=new LazyAdapter(activity, array);
+			listView.setAdapter(ladapter);
+			
+			//listView.setAdapter(adapter);
 			progressBar.setVisibility(ProgressBar.INVISIBLE);
 		}
 	}
@@ -168,5 +241,44 @@ public class NewsActivity extends Activity {
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
+	}
+	
+	private class ImagesArrayAdapter extends ArrayAdapter<ImageView> {
+		private LayoutInflater inflater=null;
+		private Context context;
+		private List<ImageView> data;
+
+		public ImagesArrayAdapter(Context _context, int textViewResourceId, List<ImageView> objects) {
+			super(_context, textViewResourceId, objects);
+			context = _context;
+			data = objects;
+			inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		}
+
+		@Override
+		public void add(ImageView object) {
+			data.add(object);
+		}
+
+		@Override
+		public ImageView getItem(int position) {
+			return data.get(position);
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			View vi=convertView;
+			if(convertView==null){
+				vi = inflater.inflate(R.layout.image_item, null);
+			}
+
+			//ImageView img = (ImageView)vi.findViewById(R.id.imageRowView);
+			RelativeLayout lay = (RelativeLayout)vi.findViewById(R.id.imageRelativeLayout);
+			//Bitmap bit = data.get(position);
+			//img.setImageBitmap(data.get(position).getDrawingCache());
+			lay.addView(data.get(position));
+			//img = data.get(position);
+			return vi;
+		}
 	}
 }

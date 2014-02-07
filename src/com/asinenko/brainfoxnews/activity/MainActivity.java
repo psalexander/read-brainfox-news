@@ -1,4 +1,4 @@
-package com.asinenko.brainfoxnews;
+package com.asinenko.brainfoxnews.activity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -17,6 +17,12 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.asinenko.brainfoxnews.R;
+import com.asinenko.brainfoxnews.R.id;
+import com.asinenko.brainfoxnews.R.layout;
+import com.asinenko.brainfoxnews.R.menu;
+import com.asinenko.brainfoxnews.items.NewsListItem;
 
 import android.os.AsyncTask;
 import android.os.Bundle;

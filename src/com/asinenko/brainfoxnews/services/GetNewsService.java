@@ -1,4 +1,4 @@
-package com.asinenko.brainfoxnews;
+package com.asinenko.brainfoxnews.services;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;

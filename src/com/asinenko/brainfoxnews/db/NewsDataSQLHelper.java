@@ -1,4 +1,4 @@
-package com.asinenko.brainfoxnews;
+package com.asinenko.brainfoxnews.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

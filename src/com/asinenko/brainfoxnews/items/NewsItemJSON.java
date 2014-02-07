@@ -1,4 +1,4 @@
-package com.asinenko.brainfoxnews;
+package com.asinenko.brainfoxnews.items;
 
 public class NewsItemJSON {
 	private String id;

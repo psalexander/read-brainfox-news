@@ -1,4 +1,9 @@
-package com.asinenko.brainfoxnews;
+package com.asinenko.brainfoxnews.db;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import com.asinenko.brainfoxnews.items.NewsSQLItem;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -34,7 +39,7 @@ public class NewsDataSource {
 		dbHelper.close();
 	}
 
-	public long createGPSLocation(NewsSQLItem item){
+	public long createNewsItem(NewsSQLItem item){
 		ContentValues values = new ContentValues();
 		values.put(NewsDataSQLHelper.NEWS_COLUMN_ID, item.getId());
 		values.put(NewsDataSQLHelper.NEWS_COLUMN_DB_ID, item.getDbId());
@@ -47,12 +52,24 @@ public class NewsDataSource {
 		return insertId;
 	}
 
-	public int getNewsCount(){//потом нужно переписать нормально
+	public int getNewsCount(){
 		String countQuery = "SELECT  * FROM " + NewsDataSQLHelper.TABLE_NEWS;
 		Cursor cursor = database.rawQuery(countQuery, null);
 		int count = cursor.getCount();
 		cursor.close();
 		return count;
+	}
+
+	public List<NewsSQLItem> getAllItems(){
+		List<NewsSQLItem> list = new LinkedList<NewsSQLItem>();
+		Cursor cursor = database.query(NewsDataSQLHelper.TABLE_NEWS, allNewsColumns, null, null, null, null, null);
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			NewsSQLItem item = cursorToNews(cursor);
+			list.add(item);
+			cursor.moveToNext();
+		}
+		return list;
 	}
 
 	private NewsSQLItem cursorToNews(Cursor cursor){

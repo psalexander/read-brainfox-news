@@ -1,4 +1,4 @@
-package com.asinenko.brainfoxnews;
+package com.asinenko.brainfoxnews.services;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
