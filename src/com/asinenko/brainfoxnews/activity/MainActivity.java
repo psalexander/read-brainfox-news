@@ -129,7 +129,7 @@ public class MainActivity extends Activity {
 		dataSources = new NewsDataSource(activity);
 		dataSources.open();
 		cursor = dataSources.getNewsCursor();
-		cursorAdapter = new ClientCursorAdapter(activity, R.layout.listview_item, cursor, 0);
+		cursorAdapter = new ClientCursorAdapter(activity, R.layout.listview_item, cursor, true);
 		listview.setAdapter(cursorAdapter);
 		listview.setOnItemClickListener(new OnItemClickListener() {
 			@Override
@@ -267,7 +267,7 @@ public class MainActivity extends Activity {
 		private Cursor mCursor;
 		private Context mContext;
 
-		public ClientCursorAdapter(Context context, int layout, Cursor c, int flags) {
+		public ClientCursorAdapter(Context context, int layout, Cursor c, boolean flags) {
 			super(context, layout, c, flags);
 			inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			mCursor = c;
