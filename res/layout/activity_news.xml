@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".NewsActivity" >
-
+	<ScrollView android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -27,27 +28,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        <ScrollView
-            android:layout_width="fill_parent"
-            android:layout_height="0dp"
-            android:scrollbarStyle="insideOverlay" >
-
-            <LinearLayout
-                android:id="@+id/imageLayout"
-                android:orientation="horizontal"
+        <com.asinenko.brainfoxnews.HorizontalListView 
+                android:id="@+id/imageListView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="150dp">
 
-            </LinearLayout>
-        </ScrollView>
-
+        </com.asinenko.brainfoxnews.HorizontalListView>
         <TextView
             android:id="@+id/mainTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium" />
-
         <TextView
             android:id="@+id/dateTextView"
             android:layout_width="wrap_content"
@@ -57,9 +48,8 @@
             android:layout_gravity="right"
             android:textStyle="italic"
             android:textAppearance="?android:attr/textAppearanceSmall" />
-
     </LinearLayout>
-
+    </ScrollView>
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleLarge"
@@ -69,5 +59,4 @@
         android:layout_alignParentLeft="false"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true" />
-
 </RelativeLayout>
