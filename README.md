@@ -38,4 +38,4 @@
 Пример использования ListView, который используется в приложении.
 http://www.androidhive.info/2012/02/android-custom-listview-with-image-and-text/
                                                                                                                                                                                                             
-~                                                                                       
+http://www.androiddevelopersolution.com/2012/11/horizontal-listview-in-android-example.html                                                                                       
