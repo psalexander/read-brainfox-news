@@ -10,10 +10,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 public class NewsDataSource {
 	private SQLiteDatabase database;
 	private NewsDataSQLHelper dbHelper;
+
+	private static String LASTREQUEST = "lastreq";
 
 	private String[] allNewsColumns = { NewsDataSQLHelper.NEWS_COLUMN_ID,
 										NewsDataSQLHelper.NEWS_COLUMN_DB_ID,
@@ -50,6 +53,32 @@ public class NewsDataSource {
 		values.put(NewsDataSQLHelper.NEWS_COLUMN_IMAGE, item.getImage());
 		long insertId = database.insert(NewsDataSQLHelper.TABLE_NEWS, null, values);
 		return insertId;
+	}
+
+	public void addLastReq() {
+		ContentValues values = new ContentValues();
+		values.put(NewsDataSQLHelper.SETTINGS_COLUMN_NAME, LASTREQUEST); // Contact Name
+		values.put(NewsDataSQLHelper.SETTINGS_COLUMN_VALUE, "0"); // Contact Phone Number
+		database.insert(NewsDataSQLHelper.TABLE_SETTINGS, null, values);
+	}
+
+	public String getLastRequestTime(){
+		String resp = "";
+		String getLastQuery = "SELECT * FROM " + NewsDataSQLHelper.TABLE_SETTINGS + " WHERE name='" + LASTREQUEST + "'";
+		Cursor cursor = database.rawQuery(getLastQuery, null);
+		if(cursor == null || cursor.getCount() == 0){
+			addLastReq();
+		}else{
+			cursor.moveToFirst();
+			resp = cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.SETTINGS_COLUMN_VALUE));//2
+		}
+		cursor.close();
+		return resp;
+	}
+	public int updateLastRequestTime(String time) {
+		ContentValues values = new ContentValues();
+		values.put(NewsDataSQLHelper.SETTINGS_COLUMN_VALUE, time);
+		return database.update(NewsDataSQLHelper.TABLE_SETTINGS, values, NewsDataSQLHelper.SETTINGS_COLUMN_NAME + " = ?", new String[] { LASTREQUEST });
 	}
 
 	public int getNewsCount(){

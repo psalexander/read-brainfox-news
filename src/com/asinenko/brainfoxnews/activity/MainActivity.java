@@ -68,27 +68,6 @@ public class MainActivity extends Activity {
 	ClientCursorAdapter cursorAdapter;
 	NewsDataSource dataSources;
 	private void parseJSON(String jsonStr){
-		/*
-		 * {
-		 * 	"error_code":0,
-		 * "ts":23142340,
-		 * 	"data":
-		 * 		[
-		 * 			{
-		 * 				"id":"4",
-		 * 				"name":null,
-		 * 				"shorttext":null,
-		 * 				"date":"2014-01-22 08:54:14"
-		 * 			},
-		 * 			{
-		 * 				"id":"3",
-		 * 				"name":null,
-		 * 				"shorttext":null,
-		 * 				"date":"2014-01-22 08:54:14"
-		 * 			}
-		 * 		]
-		 * }
-		 */
 		list.clear();
 		if (jsonStr != null) {
 			try {
@@ -107,6 +86,9 @@ public class MainActivity extends Activity {
 					NewsListItem it = new NewsListItem(id, name, date,shorttext);
 					list.add(it);
 				}
+				//dataSources.setLastRequestTime(timestamp);
+				dataSources.updateLastRequestTime(timestamp);
+				Log.w("888888888", timestamp);
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
@@ -151,7 +133,8 @@ public class MainActivity extends Activity {
 
 		dataList = new ArrayList<HashMap<String, String>>();
 		listItems = new LinkedList<NewsListItem>();
-		new RequestTask().execute("http://baklikov.ru/ttt.php?action=list");
+		String r = "http://baklikov.ru/ttt.php?action=list&ts=" + dataSources.getLastRequestTime();
+		new RequestTask().execute(r);
 	}
 
 	@Override
@@ -174,7 +157,10 @@ public class MainActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_refresh:
-			new RequestTask().execute("http://baklikov.ru/ttt.php?action=list");
+			//new RequestTask().execute("http://baklikov.ru/ttt.php?action=list&ts=" + dataSources.getLastRequestTime());
+			String r = "http://baklikov.ru/ttt.php?action=list&ts=" + dataSources.getLastRequestTime();
+			Log.w("44444444444", r);
+			new RequestTask().execute(r);
 			break;
 		case R.id.action_start_sevice:
 			
