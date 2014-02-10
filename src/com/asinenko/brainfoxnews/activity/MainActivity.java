@@ -23,11 +23,13 @@ import com.asinenko.brainfoxnews.db.NewsDataSQLHelper;
 import com.asinenko.brainfoxnews.db.NewsDataSource;
 import com.asinenko.brainfoxnews.items.NewsListItem;
 import com.asinenko.brainfoxnews.items.NewsSQLItem;
+import com.asinenko.brainfoxnews.services.RepeatingAlarmGetNewsService;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.telephony.TelephonyManager;
@@ -83,7 +85,7 @@ public class MainActivity extends Activity {
 					String name = c.getString(TAG_NAME);
 					String shorttext = c.getString(TAG_SHORTTEXT);
 					String date = c.getString(TAG_DATE);
-					NewsListItem it = new NewsListItem(id, name, date,shorttext);
+					NewsListItem it = new NewsListItem(id, name, shorttext, date);
 					list.add(it);
 				}
 				//dataSources.setLastRequestTime(timestamp);
@@ -117,16 +119,19 @@ public class MainActivity extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
 				Cursor cursor = (Cursor) listview.getItemAtPosition(position);
-				String countryCode = cursor.getString(cursor.getColumnIndexOrThrow(NewsDataSQLHelper.NEWS_COLUMN_DB_ID));
-				Toast.makeText(getApplicationContext(), countryCode, Toast.LENGTH_SHORT).show();
+				String newsid = cursor.getString(cursor.getColumnIndexOrThrow(NewsDataSQLHelper.NEWS_COLUMN_DB_ID));
+				String title = cursor.getString(cursor.getColumnIndexOrThrow(NewsDataSQLHelper.NEWS_COLUMN_TITLE));
+				String shorttext = cursor.getString(cursor.getColumnIndexOrThrow(NewsDataSQLHelper.NEWS_COLUMN_SHORTTEXT));
+				String date = cursor.getString(cursor.getColumnIndexOrThrow(NewsDataSQLHelper.NEWS_COLUMN_DATE));
 
-//				final NewsListItem item = (NewsListItem) parent.getItemAtPosition(position);
-//				Intent intent = new Intent(MainActivity.this, NewsActivity.class);
-//				intent.putExtra("newsid", item.getId());
-//				intent.putExtra("title", item.getName());
-//				intent.putExtra("short", item.getText());
-//				intent.putExtra("date", item.getDate());
-//				startActivity(intent);
+				//Toast.makeText(getApplicationContext(), newsid, Toast.LENGTH_SHORT).show();
+
+				Intent intent = new Intent(MainActivity.this, NewsActivity.class);
+				intent.putExtra("newsid", newsid);
+				intent.putExtra("title", title);
+				intent.putExtra("short", shorttext);
+				intent.putExtra("date", date);
+				startActivity(intent);
 //				//Toast.makeText (getApplicationContext(), item.getName() + "\n" + item.getDate() + "\n" + item.getText(), Toast.LENGTH_LONG).show ();
 			}
 		});
@@ -153,20 +158,22 @@ public class MainActivity extends Activity {
 		return tMgr.getLine1Number();
 	}
 
+	Intent intent;
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_refresh:
 			//new RequestTask().execute("http://baklikov.ru/ttt.php?action=list&ts=" + dataSources.getLastRequestTime());
 			String r = "http://baklikov.ru/ttt.php?action=list&ts=" + dataSources.getLastRequestTime();
-			Log.w("44444444444", r);
 			new RequestTask().execute(r);
 			break;
 		case R.id.action_start_sevice:
-			
+			intent = new Intent(this, RepeatingAlarmGetNewsService.class);
+			startService(intent);
 			break;
 		case R.id.action_stop_sevice:
-			
+			stopService(intent);
 			break;
 		default:
 			break;

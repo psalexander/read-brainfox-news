@@ -5,7 +5,10 @@ public class NewsListItem {
 	private String name;
 	private String date;
 	private String text;
-	public NewsListItem(String id, String name, String date, String text) {
+	public static String timestamp;
+	public static String errorcode;
+
+	public NewsListItem(String id, String name, String text, String date) {
 		this.id = id;
 		this.name = name;
 		this.date = date;

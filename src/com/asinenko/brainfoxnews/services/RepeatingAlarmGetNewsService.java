@@ -32,7 +32,7 @@ public class RepeatingAlarmGetNewsService extends Service {
 	@Override
 	public void onDestroy() {
 		if (alarmManager != null) {
-			Intent intent = new Intent(this, RepeatingAlarmService.class);
+			Intent intent = new Intent(this, RepeatingUpdateService.class);
 			alarmManager.cancel(PendingIntent.getBroadcast(this, REQUEST_CODE, intent, 0));
 		}
 		Toast.makeText(this, "Service Stopped!", Toast.LENGTH_LONG).show();
@@ -40,7 +40,7 @@ public class RepeatingAlarmGetNewsService extends Service {
 	}
 
 	private void startService() {
-		Intent intent = new Intent(this, RepeatingAlarmService.class);
+		Intent intent = new Intent(this, RepeatingUpdateService.class);
 		PendingIntent pendingIntent = PendingIntent.getBroadcast(this, REQUEST_CODE, intent, 0);
 
 		alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);

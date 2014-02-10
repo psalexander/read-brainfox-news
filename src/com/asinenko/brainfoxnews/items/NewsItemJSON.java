@@ -4,11 +4,17 @@ public class NewsItemJSON {
 	private String id;
 	private String name;
 	private String shorttext;
-	private String timestamp;
-	private String utime;
 	private String data;
-	private String errorcode;
+	public static String timestamp;
+	public static String errorcode;
 
+	public NewsItemJSON(String id, String name, String shorttext, String data) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.shorttext = shorttext;
+		this.data = data;
+	}
 	public String getId() {
 		return id;
 	}
@@ -27,28 +33,11 @@ public class NewsItemJSON {
 	public void setShorttext(String shorttext) {
 		this.shorttext = shorttext;
 	}
-	public String getTimestamp() {
-		return timestamp;
-	}
-	public void setTimestamp(String timestamp) {
-		this.timestamp = timestamp;
-	}
-	public String getUtime() {
-		return utime;
-	}
-	public void setUtime(String utime) {
-		this.utime = utime;
-	}
 	public String getData() {
 		return data;
 	}
 	public void setData(String data) {
 		this.data = data;
 	}
-	public String getErrorСode() {
-		return errorcode;
-	}
-	public void setErrorСode(String errorcode) {
-		this.errorcode = errorcode;
-	}
+
 }
