@@ -26,11 +26,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium" />
-        <com.asinenko.brainfoxnews.HorizontalListView 
+        <com.asinenko.brainfoxnews.HorizontalListView
                 android:id="@+id/imageListView"
                 android:layout_width="match_parent"
                 android:layout_height="150dp">
         </com.asinenko.brainfoxnews.HorizontalListView>
+        <ImageView
+                android:id="@+id/oneImageNewsView"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
         <TextView
             android:id="@+id/mainTextView"
             android:layout_width="match_parent"
