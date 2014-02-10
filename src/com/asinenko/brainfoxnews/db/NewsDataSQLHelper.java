@@ -2,13 +2,12 @@ package com.asinenko.brainfoxnews.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class NewsDataSQLHelper extends SQLiteOpenHelper{
 
 	private static final String DATABASE_NAME = "news.db";
-	private static final int DATABASE_VERSION = 12;
+	private static final int DATABASE_VERSION = 14;
 
 	//Settings table
 	public static final String TABLE_SETTINGS = "settings";

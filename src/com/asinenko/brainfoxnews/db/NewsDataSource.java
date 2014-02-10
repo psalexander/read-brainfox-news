@@ -114,7 +114,7 @@ public class NewsDataSource {
 	}
 
 	public Cursor getNewsCursor(){
-		Cursor cursor = database.query(NewsDataSQLHelper.TABLE_NEWS, allNewsColumns, null, null, null, null, null);
+		Cursor cursor = database.query(NewsDataSQLHelper.TABLE_NEWS, allNewsColumns, null, null, null, null, NewsDataSQLHelper.NEWS_COLUMN_DB_ID + " DESC");
 		return cursor;
 	}
 }

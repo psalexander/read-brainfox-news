@@ -35,8 +35,9 @@ public class LazyAdapter extends BaseAdapter{
 
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View vi=convertView;
-		if(convertView==null)
+		if(convertView==null){
 			vi = inflater.inflate(R.layout.image_item, null);
+		}
 		ImageView image=(ImageView)vi.findViewById(R.id.imageRowView);
 		imageLoader.DisplayImage(data[position], image);
 		return vi;

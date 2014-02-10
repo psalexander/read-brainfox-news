@@ -4,7 +4,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.http.HttpResponse;
@@ -14,13 +13,11 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import com.asinenko.brainfoxnews.R;
 import com.asinenko.brainfoxnews.db.NewsDataSQLHelper;
 import com.asinenko.brainfoxnews.db.NewsDataSource;
+import com.asinenko.brainfoxnews.items.JsonParser;
 import com.asinenko.brainfoxnews.items.NewsListItem;
 import com.asinenko.brainfoxnews.items.NewsSQLItem;
 import com.asinenko.brainfoxnews.services.RepeatingAlarmGetNewsService;
@@ -51,54 +48,56 @@ import android.widget.Toast;
 public class MainActivity extends Activity {
 
 	// JSON Node names
-	private static final String TAG_ID = "id";
-	private static final String TAG_NAME = "name";
-	private static final String TAG_SHORTTEXT = "shorttext";
-	private static final String TAG_TIMESTAMP = "ts";
-	private static final String TAG_UTIME = "utime";
-	private static final String TAG_DATA = "data";
-	private static final String TAG_DATE = "date";
-	private static final String TAG_ERROR_CODE = "error_code";
+//	private static final String TAG_ID = "id";
+//	private static final String TAG_NAME = "name";
+//	private static final String TAG_SHORTTEXT = "shorttext";
+//	private static final String TAG_TIMESTAMP = "ts";
+//	private static final String TAG_DATA = "data";
+//	private static final String TAG_DATE = "date";
+//	private static final String TAG_ERROR_CODE = "error_code";
+//	private JSONArray data = null;
+//	private ArrayList<HashMap<String, String>> dataList;
+//	private List<NewsListItem> listItems;
 
-	JSONArray data = null;
-	ArrayList<HashMap<String, String>> dataList;
-	List<NewsListItem> listItems;
 	private ListView listview;
-	private ArrayList<NewsListItem> list;
+	private List<NewsListItem> list;
 	private Activity activity;
 	private ProgressBar progressBar;
-	ClientCursorAdapter cursorAdapter;
-	NewsDataSource dataSources;
-	private void parseJSON(String jsonStr){
-		list.clear();
-		if (jsonStr != null) {
-			try {
-				JSONObject jsonObj = new JSONObject(jsonStr);
-				// Getting JSON Array node
-				String error = jsonObj.getString(TAG_ERROR_CODE);
-				data = jsonObj.getJSONArray(TAG_DATA);
-				String timestamp = jsonObj.getString(TAG_TIMESTAMP);
-				// looping through All Contacts
-				for (int i = 0; i < data.length(); i++) {
-					JSONObject c = data.getJSONObject(i);
-					String id = c.getString(TAG_ID);
-					String name = c.getString(TAG_NAME);
-					String shorttext = c.getString(TAG_SHORTTEXT);
-					String date = c.getString(TAG_DATE);
-					NewsListItem it = new NewsListItem(id, name, shorttext, date);
-					list.add(it);
-				}
-				//dataSources.setLastRequestTime(timestamp);
-				dataSources.updateLastRequestTime(timestamp);
-				Log.w("888888888", timestamp);
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-		} else {
-			Log.e("ServiceHandler", "Couldn't get any data from the url");
-		}
-	}
-	Cursor cursor;
+	private ClientCursorAdapter cursorAdapter;
+	private NewsDataSource dataSources;
+	private Cursor cursor;
+	private Intent intent;
+
+//	private void parseJSON(String jsonStr){
+//		list.clear();
+//		if (jsonStr != null) {
+//			try {
+//				JSONObject jsonObj = new JSONObject(jsonStr);
+//				// Getting JSON Array node
+//				String error = jsonObj.getString(TAG_ERROR_CODE);
+//				data = jsonObj.getJSONArray(TAG_DATA);
+//				String timestamp = jsonObj.getString(TAG_TIMESTAMP);
+//				// looping through All Contacts
+//				for (int i = 0; i < data.length(); i++) {
+//					JSONObject c = data.getJSONObject(i);
+//					String id = c.getString(TAG_ID);
+//					String name = c.getString(TAG_NAME);
+//					String shorttext = c.getString(TAG_SHORTTEXT);
+//					String date = c.getString(TAG_DATE);
+//					NewsListItem it = new NewsListItem(id, name, shorttext, date);
+//					list.add(it);
+//				}
+//				//dataSources.setLastRequestTime(timestamp);
+//				dataSources.updateLastRequestTime(timestamp);
+//				Log.w("888888888", timestamp);
+//			} catch (JSONException e) {
+//				e.printStackTrace();
+//			}
+//		} else {
+//			Log.e("ServiceHandler", "Couldn't get any data from the url");
+//		}
+//	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -124,20 +123,17 @@ public class MainActivity extends Activity {
 				String shorttext = cursor.getString(cursor.getColumnIndexOrThrow(NewsDataSQLHelper.NEWS_COLUMN_SHORTTEXT));
 				String date = cursor.getString(cursor.getColumnIndexOrThrow(NewsDataSQLHelper.NEWS_COLUMN_DATE));
 
-				//Toast.makeText(getApplicationContext(), newsid, Toast.LENGTH_SHORT).show();
-
 				Intent intent = new Intent(MainActivity.this, NewsActivity.class);
 				intent.putExtra("newsid", newsid);
 				intent.putExtra("title", title);
 				intent.putExtra("short", shorttext);
 				intent.putExtra("date", date);
 				startActivity(intent);
-//				//Toast.makeText (getApplicationContext(), item.getName() + "\n" + item.getDate() + "\n" + item.getText(), Toast.LENGTH_LONG).show ();
 			}
 		});
 
-		dataList = new ArrayList<HashMap<String, String>>();
-		listItems = new LinkedList<NewsListItem>();
+//		dataList = new ArrayList<HashMap<String, String>>();
+//		listItems = new LinkedList<NewsListItem>();
 		String r = "http://baklikov.ru/ttt.php?action=list&ts=" + dataSources.getLastRequestTime();
 		new RequestTask().execute(r);
 	}
@@ -157,8 +153,6 @@ public class MainActivity extends Activity {
 		TelephonyManager tMgr =(TelephonyManager)this.getSystemService(Context.TELEPHONY_SERVICE);
 		return tMgr.getLine1Number();
 	}
-
-	Intent intent;
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -212,7 +206,14 @@ public class MainActivity extends Activity {
 			} catch (IOException e) {
 				//TODO Handle problems
 			}
-			parseJSON(responseString);
+
+//			//dataSources.setLastRequestTime(timestamp);
+
+			list = JsonParser.parseJSONtoNewsItem(responseString);
+			if(NewsListItem.errorcode.equals("0")){
+				dataSources.updateLastRequestTime(NewsListItem.timestamp);
+			}
+			//parseJSON(responseString);
 			return responseString;
 		}
 
@@ -221,7 +222,11 @@ public class MainActivity extends Activity {
 			super.onPostExecute(result);
 			//Do anything with response
 			// парсим и обновляем список
-			Toast.makeText(getApplicationContext(), String.valueOf(list.size()), Toast.LENGTH_SHORT).show();
+			if(!NewsListItem.errorcode.equals("0")){
+				Toast.makeText(getApplicationContext(), "Error code is " + NewsListItem.errorcode, Toast.LENGTH_SHORT).show();
+			}else{
+				Toast.makeText(getApplicationContext(), String.valueOf(list.size()), Toast.LENGTH_SHORT).show();
+			}
 			for (NewsListItem it : list) {
 				NewsSQLItem n = new NewsSQLItem();
 				n.setDbId(it.getId());
@@ -230,27 +235,8 @@ public class MainActivity extends Activity {
 				n.setShorttext(it.getText());
 				dataSources.createNewsItem(n);
 			}
-			//listview.invalidateViews();
-
-			//listview.refreshDrawableState();
 			cursor.requery();
 			cursorAdapter.notifyDataSetChanged();
-//			final NewsArrayAdapter adapter = new NewsArrayAdapter(activity, R.layout.listview_item, list);
-//			listview.setAdapter(adapter);
-//			listview.setOnItemClickListener(new OnItemClickListener() {
-//				@Override
-//				public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
-//					final NewsListItem item = (NewsListItem) parent.getItemAtPosition(position);
-//
-//					Intent intent = new Intent(MainActivity.this, NewsActivity.class);
-//					intent.putExtra("newsid", item.getId());
-//					intent.putExtra("title", item.getName());
-//					intent.putExtra("short", item.getText());
-//					intent.putExtra("date", item.getDate());
-//					startActivity(intent);
-//					//Toast.makeText (getApplicationContext(), item.getName() + "\n" + item.getDate() + "\n" + item.getText(), Toast.LENGTH_LONG).show ();
-//				}
-//			});
 			progressBar.setVisibility(ProgressBar.INVISIBLE);
 		}
 	}
