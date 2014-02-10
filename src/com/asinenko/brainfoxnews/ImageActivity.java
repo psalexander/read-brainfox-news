@@ -1,6 +1,5 @@
 package com.asinenko.brainfoxnews;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import org.apache.http.HttpResponse;
@@ -10,10 +9,6 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-
-import com.asinenko.brainfoxnews.items.JsonParser;
-import com.asinenko.brainfoxnews.items.NewsListItem;
-import com.asinenko.brainfoxnews.items.NewsSQLItem;
 
 import android.app.Activity;
 import android.content.res.Configuration;
@@ -33,6 +28,7 @@ public class ImageActivity extends Activity {
 	private String imageUrl;
 	private ProgressBar progressBar;
 	private static final String IMAGE_URL = "http://baklikov.ru/ttt.php?action=image&id=";
+	private Bitmap image = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,16 +36,11 @@ public class ImageActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_image);
-
 		imageView = (ImageView)findViewById(R.id.oneImageView);
 		progressBar = (ProgressBar)findViewById(R.id.progressBar);
-
 		imageUrl = getIntent().getExtras().getString("url");
-
 		new RequestTask().execute(IMAGE_URL + imageUrl);
 	}
-
-	private Bitmap image = null;
 
 	class RequestTask extends AsyncTask<String, String, String>{
 
@@ -67,15 +58,8 @@ public class ImageActivity extends Activity {
 				response = httpclient.execute(new HttpGet(uri[0]));
 				StatusLine statusLine = response.getStatusLine();
 				if(statusLine.getStatusCode() == HttpStatus.SC_OK){
-					
-					
-					//ByteArrayOutputStream out = new ByteArrayOutputStream();
-					//response.getEntity().writeTo(out);
-					//out.close();
 					image = BitmapFactory.decodeStream(response.getEntity().getContent());
-					//responseString = out.toString();
 				} else{
-					//Closes the connection.
 					response.getEntity().getContent().close();
 					throw new IOException(statusLine.getReasonPhrase());
 				}
@@ -100,5 +84,4 @@ public class ImageActivity extends Activity {
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 	}
-
 }

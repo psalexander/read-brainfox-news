@@ -47,18 +47,6 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
-	// JSON Node names
-//	private static final String TAG_ID = "id";
-//	private static final String TAG_NAME = "name";
-//	private static final String TAG_SHORTTEXT = "shorttext";
-//	private static final String TAG_TIMESTAMP = "ts";
-//	private static final String TAG_DATA = "data";
-//	private static final String TAG_DATE = "date";
-//	private static final String TAG_ERROR_CODE = "error_code";
-//	private JSONArray data = null;
-//	private ArrayList<HashMap<String, String>> dataList;
-//	private List<NewsListItem> listItems;
-
 	private ListView listview;
 	private List<NewsListItem> list;
 	private Activity activity;
@@ -67,36 +55,6 @@ public class MainActivity extends Activity {
 	private NewsDataSource dataSources;
 	private Cursor cursor;
 	private Intent intent;
-
-//	private void parseJSON(String jsonStr){
-//		list.clear();
-//		if (jsonStr != null) {
-//			try {
-//				JSONObject jsonObj = new JSONObject(jsonStr);
-//				// Getting JSON Array node
-//				String error = jsonObj.getString(TAG_ERROR_CODE);
-//				data = jsonObj.getJSONArray(TAG_DATA);
-//				String timestamp = jsonObj.getString(TAG_TIMESTAMP);
-//				// looping through All Contacts
-//				for (int i = 0; i < data.length(); i++) {
-//					JSONObject c = data.getJSONObject(i);
-//					String id = c.getString(TAG_ID);
-//					String name = c.getString(TAG_NAME);
-//					String shorttext = c.getString(TAG_SHORTTEXT);
-//					String date = c.getString(TAG_DATE);
-//					NewsListItem it = new NewsListItem(id, name, shorttext, date);
-//					list.add(it);
-//				}
-//				//dataSources.setLastRequestTime(timestamp);
-//				dataSources.updateLastRequestTime(timestamp);
-//				Log.w("888888888", timestamp);
-//			} catch (JSONException e) {
-//				e.printStackTrace();
-//			}
-//		} else {
-//			Log.e("ServiceHandler", "Couldn't get any data from the url");
-//		}
-//	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -132,8 +90,6 @@ public class MainActivity extends Activity {
 			}
 		});
 
-//		dataList = new ArrayList<HashMap<String, String>>();
-//		listItems = new LinkedList<NewsListItem>();
 		String r = "http://baklikov.ru/ttt.php?action=list&ts=" + dataSources.getLastRequestTime();
 		new RequestTask().execute(r);
 	}
@@ -158,7 +114,6 @@ public class MainActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_refresh:
-			//new RequestTask().execute("http://baklikov.ru/ttt.php?action=list&ts=" + dataSources.getLastRequestTime());
 			String r = "http://baklikov.ru/ttt.php?action=list&ts=" + dataSources.getLastRequestTime();
 			new RequestTask().execute(r);
 			break;
@@ -176,7 +131,6 @@ public class MainActivity extends Activity {
 	}
 
 	class RequestTask extends AsyncTask<String, String, String>{
-
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
@@ -207,13 +161,10 @@ public class MainActivity extends Activity {
 				//TODO Handle problems
 			}
 
-//			//dataSources.setLastRequestTime(timestamp);
-
 			list = JsonParser.parseJSONtoNewsItem(responseString);
 			if(NewsListItem.errorcode.equals("0")){
 				dataSources.updateLastRequestTime(NewsListItem.timestamp);
 			}
-			//parseJSON(responseString);
 			return responseString;
 		}
 

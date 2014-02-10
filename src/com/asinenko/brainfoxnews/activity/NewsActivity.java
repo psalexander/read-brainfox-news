@@ -42,12 +42,6 @@ import android.widget.Toast;
 
 public class NewsActivity extends Activity {
 
-//	private static final String TAG_TITLE = "name";
-//	private static final String TAG_SHORTTEXT = "shorttext";
-//	private static final String TAG_DATA = "text";
-//	private static final String TAG_DATE = "date";
-//	private static final String TAG_ERROR_CODE = "error_code";
-//	private static final String TAG_IMAGES = "images";
 	private static final String IMAGE_URL = "http://baklikov.ru/ttt.php?action=image&id=";//16&h=150";
 
 	private HorizontalListView listView;
@@ -66,10 +60,6 @@ public class NewsActivity extends Activity {
 	private String date;
 
 	private NewsItem newsItem;
-
-//	private String error;
-//	private JSONArray data = null;
-//	private ImagesArrayAdapter adapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -90,62 +80,8 @@ public class NewsActivity extends Activity {
 		title = getIntent().getExtras().getString("title");
 		firsttext = getIntent().getExtras().getString("short");
 		date = getIntent().getExtras().getString("date");
-
 		new RequestTask().execute("http://baklikov.ru/ttt.php?action=details&id=" + id);
-
-//		listView.setAdapter(adapter);
-//		listView.setOnItemClickListener(new OnItemClickListener() {
-//			@Override
-//			public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
-////				final NewsListItem item = (NewsListItem) parent.getItemAtPosition(position);
-////				Intent intent = new Intent(MainActivity.this, NewsActivity.class);
-////				intent.putExtra("newsid", item.getId());
-////				intent.putExtra("title", item.getName());
-////				intent.putExtra("short", item.getText());
-////				intent.putExtra("date", item.getDate());
-////				startActivity(intent);
-//				//Toast.makeText (getApplicationContext(), item.getName() + "\n" + item.getDate() + "\n" + item.getText(), Toast.LENGTH_LONG).show ();
-//			}
-//		});
-
-		//listView.setAdapter(adapter);
-//		ImageView im2 = new ImageView(this);
-//		im2.setImageResource(R.drawable.marcell_sebestyen);
-//		imageLayout.addView(im2);
 	}
-
-//	private List<String> imageList = new LinkedList<String>();
-//	private void parseJSON(String jsonStr){
-//
-//		if (jsonStr != null) {
-//			try {
-//				JSONObject jsonObj = new JSONObject(jsonStr);
-//				error = jsonObj.getString(TAG_ERROR_CODE);
-//				title = jsonObj.getString(TAG_TITLE);
-//				firsttext = jsonObj.getString(TAG_SHORTTEXT);
-//				mainText = jsonObj.getString(TAG_DATA);
-//				date = jsonObj.getString(TAG_DATE);
-//				data = jsonObj.getJSONArray(TAG_IMAGES);
-//				imageList.clear();
-//
-//				for (int i = 0; i < data.length(); i++) {
-//					//JSONObject c = data.getJSONObject(i);
-//
-//					imageList.add(String.valueOf(data.getInt(i)));
-////					String id = c.getString(TAG_ID);
-////					String name = c.getString(TAG_NAME);
-////					String shorttext = c.getString(TAG_SHORTTEXT);
-////					String date = c.getString(TAG_DATE);
-////					NewsListItem it = new NewsListItem(id, name, date,shorttext);
-////					list.add(it);
-//				}
-//			} catch (JSONException e) {
-//				e.printStackTrace();
-//			}
-//		} else {
-//			Log.e("ServiceHandler", "Couldn't get any data from the url");
-//		}
-//	}
 
 	class RequestTask extends AsyncTask<String, String, String>{
 		@Override
@@ -176,31 +112,18 @@ public class NewsActivity extends Activity {
 			} catch (IOException e) {
 				//TODO Handle problems..
 			}
-			//parseJSON(responseString);
 			newsItem = JsonParser.parseNewsItem(id, responseString);
-
 			return responseString;
 		}
 
 		@Override
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
-//			titleTextView.setText(title);
-//			shortTextView.setText(firsttext);
-//			mainTextView.setText(mainText);
-//			dateTextView.setText(date);
 
 			titleTextView.setText(newsItem.getName());
 			shortTextView.setText(newsItem.getShorttext());
 			mainTextView.setText(newsItem.getText());
 			dateTextView.setText(newsItem.getDate());
-
-//			List<String> list = new ArrayList<String>();
-//			for(int i = 0; i < imageList.size(); i++){
-//				String id = imageList.get(i);
-//				String url = IMAGE_URL + id + "&h=300";
-//				list.add(url);
-//			}
 
 			List<String> list = new ArrayList<String>();
 			for(int i = 0; i < newsItem.getImages().size(); i++){
@@ -212,10 +135,8 @@ public class NewsActivity extends Activity {
 			final LazyAdapter ladapter=new LazyAdapter(activity, array);
 			listView.setAdapter(ladapter);
 			listView.setOnItemClickListener(new OnItemClickListener() {
-
 				@Override
 				public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-					Toast.makeText (getApplicationContext(), String.valueOf(position), Toast.LENGTH_LONG).show ();
 					Intent intent = new Intent(NewsActivity.this, ImageActivity.class);
 					intent.putExtra("url", newsItem.getImages().get(position));
 					startActivity(intent);
