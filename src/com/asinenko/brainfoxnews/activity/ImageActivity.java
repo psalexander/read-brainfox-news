@@ -1,4 +1,4 @@
-package com.asinenko.brainfoxnews;
+package com.asinenko.brainfoxnews.activity;
 
 import java.io.IOException;
 
@@ -9,6 +9,10 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+
+import com.asinenko.brainfoxnews.R;
+import com.asinenko.brainfoxnews.R.id;
+import com.asinenko.brainfoxnews.R.layout;
 
 import android.app.Activity;
 import android.content.res.Configuration;
@@ -43,7 +47,6 @@ public class ImageActivity extends Activity {
 	}
 
 	class RequestTask extends AsyncTask<String, String, String>{
-
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
