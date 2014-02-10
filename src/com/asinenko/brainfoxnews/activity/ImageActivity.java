@@ -11,8 +11,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import com.asinenko.brainfoxnews.R;
-import com.asinenko.brainfoxnews.R.id;
-import com.asinenko.brainfoxnews.R.layout;
+import com.asinenko.brainfoxnews.Urls;
 
 import android.app.Activity;
 import android.content.res.Configuration;
@@ -24,14 +23,12 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 public class ImageActivity extends Activity {
 
 	private ImageView imageView;
 	private String imageUrl;
 	private ProgressBar progressBar;
-	private static final String IMAGE_URL = "http://baklikov.ru/ttt.php?action=image&id=";
 	private Bitmap image = null;
 
 	@Override
@@ -43,7 +40,7 @@ public class ImageActivity extends Activity {
 		imageView = (ImageView)findViewById(R.id.oneImageView);
 		progressBar = (ProgressBar)findViewById(R.id.progressBar);
 		imageUrl = getIntent().getExtras().getString("url");
-		new RequestTask().execute(IMAGE_URL + imageUrl);
+		new RequestTask().execute(Urls.URL_GET_IMAGE + imageUrl);
 	}
 
 	class RequestTask extends AsyncTask<String, String, String>{

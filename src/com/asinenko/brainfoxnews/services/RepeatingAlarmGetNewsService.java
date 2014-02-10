@@ -13,13 +13,13 @@ public class RepeatingAlarmGetNewsService extends Service {
 
 	public static final int INTERVAL = 10000; // 10 sec
 	public static final int FIRST_RUN = 5000; // 5 seconds
-	int REQUEST_CODE = 11223344;
+	public int REQUEST_CODE = 11223344;
+
 	private AlarmManager alarmManager;
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		startService();
 		Log.v(this.getClass().getName(), "onCreate(..)");
 	}
 
@@ -28,7 +28,12 @@ public class RepeatingAlarmGetNewsService extends Service {
 		Log.v(this.getClass().getName(), "onBind(..)");
 		return null;
 	}
-
+	@Override
+	public int onStartCommand(Intent intent, int flags, int startId) {
+		Log.v(this.getClass().getName(), "onStartCommand(..)");
+		startService();
+		return Service.START_NOT_STICKY;
+	}
 	@Override
 	public void onDestroy() {
 		if (alarmManager != null) {

@@ -69,6 +69,7 @@ public class NewsActivity extends Activity {
 
 	private int displayWidth;
 	private int displayHeigth;
+	private int imageWidth;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -92,11 +93,15 @@ public class NewsActivity extends Activity {
 		display.getSize(size);
 		displayWidth = size.x;
 		displayHeigth = size.y;
+		imageWidth = displayWidth;
+		if(displayHeigth < displayWidth)
+			imageWidth = displayHeigth;
 
 		id = getIntent().getExtras().getString("newsid");
 		title = getIntent().getExtras().getString("title");
 		firsttext = getIntent().getExtras().getString("short");
 		date = getIntent().getExtras().getString("date");
+
 		new RequestTask().execute("http://baklikov.ru/ttt.php?action=details&id=" + id);
 	}
 
@@ -146,9 +151,7 @@ public class NewsActivity extends Activity {
 				listView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,0));
 			}else if(newsItem.getImages().size() == 1){
 				listView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,0));
-				int width = displayWidth;
-				if(displayHeigth < displayWidth)
-					width = displayHeigth;
+
 				imageView.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
@@ -157,7 +160,7 @@ public class NewsActivity extends Activity {
 						startActivity(intent);
 					}
 				});
-				new RequestOneImageTask().execute(Urls.URL_GET_IMAGE + newsItem.getImages().get(0) + "&w=" + String.valueOf(width));
+				new RequestOneImageTask().execute(Urls.URL_GET_IMAGE + newsItem.getImages().get(0) + "&w=" + String.valueOf(imageWidth));
 			}else{
 				listView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,300));
 				List<String> list = new ArrayList<String>();

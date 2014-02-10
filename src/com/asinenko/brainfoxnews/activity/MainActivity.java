@@ -3,7 +3,6 @@ package com.asinenko.brainfoxnews.activity;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import org.apache.http.HttpResponse;
@@ -15,6 +14,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import com.asinenko.brainfoxnews.R;
+import com.asinenko.brainfoxnews.Urls;
 import com.asinenko.brainfoxnews.db.NewsDataSQLHelper;
 import com.asinenko.brainfoxnews.db.NewsDataSource;
 import com.asinenko.brainfoxnews.items.JsonParser;
@@ -30,7 +30,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,7 +37,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.ResourceCursorAdapter;
@@ -90,7 +88,7 @@ public class MainActivity extends Activity {
 			}
 		});
 
-		String r = "http://baklikov.ru/ttt.php?action=list&ts=" + dataSources.getLastRequestTime();
+		String r = Urls.URL_GET_NEWS_LIST + dataSources.getLastRequestTime();
 		new RequestTask().execute(r);
 	}
 
@@ -114,7 +112,7 @@ public class MainActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_refresh:
-			String r = "http://baklikov.ru/ttt.php?action=list&ts=" + dataSources.getLastRequestTime();
+			String r = Urls.URL_GET_NEWS_LIST + dataSources.getLastRequestTime();
 			new RequestTask().execute(r);
 			break;
 		case R.id.action_start_sevice:
@@ -221,59 +219,6 @@ public class MainActivity extends Activity {
 				id.setText(cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.NEWS_COLUMN_DB_ID)));
 			}
 			notifyDataSetChanged();
-		}
-	}
-
-	private class NewsArrayAdapter extends ArrayAdapter<NewsListItem> {
-
-		HashMap<NewsListItem, Integer> mIdMap = new HashMap<NewsListItem, Integer>();
-
-		private LayoutInflater inflater=null;
-		private Context context;
-		private List<NewsListItem> data;
-
-		public NewsArrayAdapter(Context _context, int textViewResourceId, List<NewsListItem> objects) {
-			super(_context, textViewResourceId, objects);
-			context = _context;
-			for (int i = 0; i < objects.size(); ++i) {
-				mIdMap.put(objects.get(i), i);
-			}
-			data = objects;
-			inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		}
-
-		@Override
-		public long getItemId(int position) {
-			NewsListItem item = getItem(position);
-			return mIdMap.get(item);
-		}
-
-		@Override
-		public boolean hasStableIds() {
-			return true;
-		}
-
-		@Override
-		public NewsListItem getItem(int position) {
-			return data.get(position);
-		}
-
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			View vi=convertView;
-			if(convertView==null){
-				vi = inflater.inflate(R.layout.row_item, null);
-			}
-
-			TextView title = (TextView)vi.findViewById(R.id.title);
-			TextView date = (TextView)vi.findViewById(R.id.date);
-			TextView text = (TextView)vi.findViewById(R.id.text);
-
-			NewsListItem it = data.get(position);
-			title.setText(it.getName());
-			date.setText(it.getDate());
-			text.setText(it.getText());
-			return vi;
 		}
 	}
 }

@@ -29,7 +29,7 @@
         <com.asinenko.brainfoxnews.HorizontalListView
                 android:id="@+id/imageListView"
                 android:layout_width="match_parent"
-                android:layout_height="150dp">
+                android:layout_height="wrap_content">
         </com.asinenko.brainfoxnews.HorizontalListView>
         <ImageView
                 android:id="@+id/oneImageNewsView"

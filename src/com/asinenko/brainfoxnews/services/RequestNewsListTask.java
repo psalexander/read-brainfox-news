@@ -20,7 +20,6 @@ import com.asinenko.brainfoxnews.items.NewsSQLItem;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 public class RequestNewsListTask  extends AsyncTask<String, String, String>{
 
@@ -67,7 +66,6 @@ public class RequestNewsListTask  extends AsyncTask<String, String, String>{
 	@Override
 	protected void onPostExecute(String result) {
 		progressBar.setVisibility(ProgressBar.INVISIBLE);
-		//Toast.makeText(getApplicationContext(), String.valueOf(list.size()), Toast.LENGTH_SHORT).show();
 		for (NewsListItem it : list) {
 			NewsSQLItem n = new NewsSQLItem();
 			n.setDbId(it.getId());
@@ -84,5 +82,4 @@ public class RequestNewsListTask  extends AsyncTask<String, String, String>{
 		progressBar.setVisibility(ProgressBar.VISIBLE);
 		super.onPreExecute();
 	}
-
 }
