@@ -6,5 +6,8 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_news">NewsActivity</string>
     <string name="large_text">Large Text</string>
+    <string name="title_activity_image">ImageActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 
 </resources>
