@@ -38,6 +38,8 @@
             android:name="com.asinenko.brainfoxnews.services.RepeatingAlarmGetNewsService"
             android:enabled="true" >
         </service>
+        <receiver android:name="com.asinenko.brainfoxnews.services.RepeatingUpdateService" >
+        </receiver>
 
         <activity
             android:name="com.asinenko.brainfoxnews.activity.ImageActivity"

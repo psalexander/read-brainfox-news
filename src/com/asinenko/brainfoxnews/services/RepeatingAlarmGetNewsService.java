@@ -3,6 +3,7 @@ package com.asinenko.brainfoxnews.services;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.os.SystemClock;
@@ -48,7 +49,7 @@ public class RepeatingAlarmGetNewsService extends Service {
 		Intent intent = new Intent(this, RepeatingUpdateService.class);
 		PendingIntent pendingIntent = PendingIntent.getBroadcast(this, REQUEST_CODE, intent, 0);
 
-		alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+		alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 		alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + FIRST_RUN, INTERVAL, pendingIntent);
 
 		Toast.makeText(this, "Service Started.", Toast.LENGTH_LONG).show();

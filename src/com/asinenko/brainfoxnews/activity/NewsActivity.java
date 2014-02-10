@@ -30,23 +30,17 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.view.Display;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class NewsActivity extends Activity {
-
-	private static final String IMAGE_URL = "http://baklikov.ru/ttt.php?action=image&id=";//16&h=150";
 
 	private HorizontalListView listView;
 	private TextView titleTextView;
@@ -102,7 +96,7 @@ public class NewsActivity extends Activity {
 		firsttext = getIntent().getExtras().getString("short");
 		date = getIntent().getExtras().getString("date");
 
-		new RequestTask().execute("http://baklikov.ru/ttt.php?action=details&id=" + id);
+		new RequestTask().execute(Urls.URL_GET_NEWS_ITEM + id);
 	}
 
 	class RequestTask extends AsyncTask<String, String, String>{
@@ -166,7 +160,7 @@ public class NewsActivity extends Activity {
 				List<String> list = new ArrayList<String>();
 				for(int i = 0; i < newsItem.getImages().size(); i++){
 					String id = newsItem.getImages().get(i);
-					String url = IMAGE_URL + id + "&h=300";
+					String url = Urls.URL_GET_IMAGE + id + "&h=300";
 					list.add(url);
 				}
 				String[] array = list.toArray(new String[list.size()]);
@@ -194,41 +188,6 @@ public class NewsActivity extends Activity {
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
-	}
-
-	private class ImagesArrayAdapter extends ArrayAdapter<ImageView> {
-		private LayoutInflater inflater=null;
-		private Context context;
-		private List<ImageView> data;
-
-		public ImagesArrayAdapter(Context _context, int textViewResourceId, List<ImageView> objects) {
-			super(_context, textViewResourceId, objects);
-			context = _context;
-			data = objects;
-			inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		}
-
-		@Override
-		public void add(ImageView object) {
-			data.add(object);
-		}
-
-		@Override
-		public ImageView getItem(int position) {
-			return data.get(position);
-		}
-
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			View vi=convertView;
-			if(convertView==null){
-				vi = inflater.inflate(R.layout.image_item, null);
-			}
-
-			RelativeLayout lay = (RelativeLayout)vi.findViewById(R.id.imageRelativeLayout);
-			lay.addView(data.get(position));
-			return vi;
-		}
 	}
 
 	class RequestOneImageTask extends AsyncTask<String, String, String>{
