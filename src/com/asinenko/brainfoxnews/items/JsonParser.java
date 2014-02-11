@@ -12,7 +12,6 @@ import android.util.Log;
 
 public class JsonParser {
 
-	// JSON Node names
 	private static final String TAG_ID = "id";
 	private static final String TAG_TITLE = "name";
 	private static final String TAG_SHORTTEXT = "shorttext";

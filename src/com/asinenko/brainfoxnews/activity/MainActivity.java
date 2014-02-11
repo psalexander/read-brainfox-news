@@ -52,7 +52,7 @@ public class MainActivity extends Activity {
 	private ClientCursorAdapter cursorAdapter;
 	private NewsDataSource dataSources;
 	private Cursor cursor;
-	private Intent intent;
+	//private Intent intent;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -111,11 +111,16 @@ public class MainActivity extends Activity {
 			new RequestTask().execute(r);
 			break;
 		case R.id.action_start_sevice:
-			intent = new Intent(this, RepeatingAlarmGetNewsService.class);
-			startService(intent);
+			//intent = new Intent(this, RepeatingAlarmGetNewsService.class);
+			startService(new Intent(this, RepeatingAlarmGetNewsService.class));
 			break;
 		case R.id.action_stop_sevice:
-			stopService(intent);
+			stopService(new Intent(MainActivity.this, RepeatingAlarmGetNewsService.class));
+			break;
+		case R.id.action_exit:
+			stopService(new Intent(MainActivity.this, RepeatingAlarmGetNewsService.class));
+			super.onDestroy();
+			System.exit(0);
 			break;
 		default:
 			break;
@@ -163,8 +168,6 @@ public class MainActivity extends Activity {
 		@Override
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
-			//Do anything with response
-			// парсим и обновляем список
 			if(!NewsListItem.errorcode.equals("0")){
 				Toast.makeText(getApplicationContext(), "Error code is " + NewsListItem.errorcode, Toast.LENGTH_SHORT).show();
 			}else{

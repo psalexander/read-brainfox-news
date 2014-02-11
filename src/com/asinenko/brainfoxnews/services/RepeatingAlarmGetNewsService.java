@@ -11,7 +11,8 @@ import android.widget.Toast;
 
 public class RepeatingAlarmGetNewsService extends Service {
 
-	public static final int INTERVAL = 50000; // 10 sec
+	//public static final int INTERVAL = 10 * 60 * 1000;
+	public static final int INTERVAL = 10 * 1000;
 	public static final int FIRST_RUN = 5000; // 5 seconds
 	public int REQUEST_CODE = 11223344;
 
@@ -30,7 +31,7 @@ public class RepeatingAlarmGetNewsService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		startService();
-		return Service.START_NOT_STICKY;
+		return Service.START_STICKY;//Service.START_NOT_STICKY;
 	}
 
 	@Override
@@ -47,6 +48,6 @@ public class RepeatingAlarmGetNewsService extends Service {
 		PendingIntent pendingIntent = PendingIntent.getBroadcast(this, REQUEST_CODE, intent, 0);
 		alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 		alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + FIRST_RUN, INTERVAL, pendingIntent);
-		Toast.makeText(this, "Service Started.", Toast.LENGTH_LONG).show();
+//		Toast.makeText(this, "Service Started.", Toast.LENGTH_LONG).show();
 	}
 }

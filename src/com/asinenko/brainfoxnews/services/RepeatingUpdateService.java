@@ -26,6 +26,8 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
@@ -75,7 +77,7 @@ public class RepeatingUpdateService extends BroadcastReceiver{
 				//TODO Handle problems
 			}
 
-			 list = JsonParser.parseJSONtoNewsItem(responseString);
+			list = JsonParser.parseJSONtoNewsItem(responseString);
 			if(NewsListItem.errorcode.equals("0")){
 				dataSources.updateLastRequestTime(NewsListItem.timestamp);
 			}
@@ -90,6 +92,7 @@ public class RepeatingUpdateService extends BroadcastReceiver{
 			}else{
 				Toast.makeText(context, String.valueOf(list.size()), Toast.LENGTH_SHORT).show();
 			}
+			String news = "";
 			for (NewsListItem it : list) {
 				NewsSQLItem n = new NewsSQLItem();
 				n.setDbId(it.getId());
@@ -98,16 +101,19 @@ public class RepeatingUpdateService extends BroadcastReceiver{
 				n.setShorttext(it.getText());
 				n.setType(it.getType());
 				dataSources.createNewsItem(n);
+				news = news + " " + it.getName();
 			}
 			if(list.size() > 0){
 				Intent intent2 = new Intent(context, MainActivity.class);
 				PendingIntent pIntent = PendingIntent.getActivity(context, 0, intent2, 0);
+				Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
 				Notification n  = new Notification.Builder(context)
-					.setContentTitle("Новости ххх")
-					.setContentText("На портале добавили новость.")
+					.setContentTitle("Добовление новости 1-А класса")
+					.setContentText(news.trim())
 					.setContentInfo(String.valueOf(list.size()))
 					.setSmallIcon(R.drawable.ic_action_email)
+					.setSound(alarmSound)
 					.setContentIntent(pIntent)
 					.setAutoCancel(true).build();
 				NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
