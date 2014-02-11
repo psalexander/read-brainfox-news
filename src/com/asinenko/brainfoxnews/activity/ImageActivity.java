@@ -19,6 +19,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -38,9 +40,13 @@ public class ImageActivity extends Activity {
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_image);
 		imageView = (ImageView)findViewById(R.id.oneImageView);
+		imageView.setAdjustViewBounds(true);
 		progressBar = (ProgressBar)findViewById(R.id.progressBar);
 		imageUrl = getIntent().getExtras().getString("url");
 		new RequestTask().execute(Urls.URL_GET_IMAGE + imageUrl);
+
+		//String imageFilePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/name.png";
+		//MediaStore.Images.Media.EXTERNAL_CONTENT_URI
 	}
 
 	class RequestTask extends AsyncTask<String, String, String>{
@@ -83,5 +89,23 @@ public class ImageActivity extends Activity {
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.image, menu);
+		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_save_image:
+			//save image here
+			break;
+		default:
+			break;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 }
