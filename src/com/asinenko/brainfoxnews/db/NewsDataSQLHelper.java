@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class NewsDataSQLHelper extends SQLiteOpenHelper{
 
 	private static final String DATABASE_NAME = "news.db";
-	private static final int DATABASE_VERSION = 14;
+	private static final int DATABASE_VERSION = 20;
 
 	//Settings table
 	public static final String TABLE_SETTINGS = "settings";
@@ -29,7 +29,7 @@ public class NewsDataSQLHelper extends SQLiteOpenHelper{
 	public static final String NEWS_COLUMN_DATE = "date";
 	public static final String NEWS_COLUMN_TYPE = "type";
 	public static final String NEWS_COLUMN_IMAGE = "image";
-	
+
 	private static final String DATABASE_CREATE_NEWS = "create table "
 			+ TABLE_NEWS + "(" + NEWS_COLUMN_ID + " integer primary key autoincrement, "
 			+ NEWS_COLUMN_DB_ID + " integer, "
