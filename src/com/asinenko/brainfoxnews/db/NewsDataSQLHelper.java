@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class NewsDataSQLHelper extends SQLiteOpenHelper{
 
 	private static final String DATABASE_NAME = "news.db";
-	private static final int DATABASE_VERSION = 20;
+	private static final int DATABASE_VERSION = 22;
 
 	//Settings table
 	public static final String TABLE_SETTINGS = "settings";

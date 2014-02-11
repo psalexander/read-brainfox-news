@@ -20,7 +20,6 @@ public class JsonParser {
 	private static final String TAG_DATE = "date";
 	private static final String TAG_ERROR_CODE = "error_code";
 	private static final String TAG_TYPE = "type";
-
 	private static final String TAG_TEXT = "text";
 	private static final String TAG_IMAGES = "images";
 

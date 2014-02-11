@@ -48,6 +48,6 @@ public class RepeatingAlarmGetNewsService extends Service {
 		PendingIntent pendingIntent = PendingIntent.getBroadcast(this, REQUEST_CODE, intent, 0);
 		alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 		alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + FIRST_RUN, INTERVAL, pendingIntent);
-//		Toast.makeText(this, "Service Started.", Toast.LENGTH_LONG).show();
+		Toast.makeText(this, "Service Started.", Toast.LENGTH_LONG).show();
 	}
 }

@@ -53,12 +53,11 @@ public class NewsActivity extends Activity {
 	private Activity activity;
 
 	private String id;
-	private String title;
-	private String firsttext;
-	private String mainText;
-	private String date;
+//	private String title;
+//	private String firsttext;
+//	private String mainText;
+//	private String date;
 
-	private Bitmap image;
 	private NewsItem newsItem;
 
 	private int displayWidth;
@@ -81,7 +80,6 @@ public class NewsActivity extends Activity {
 		progressBar = (ProgressBar)findViewById(R.id.progressBar);
 		progressBar.setVisibility(ProgressBar.INVISIBLE);
 
-
 		Display display =  ((WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
 		Point size = new Point();
 		display.getSize(size);
@@ -92,9 +90,6 @@ public class NewsActivity extends Activity {
 			imageWidth = displayHeigth;
 
 		id = getIntent().getExtras().getString("newsid");
-		title = getIntent().getExtras().getString("title");
-		firsttext = getIntent().getExtras().getString("short");
-		date = getIntent().getExtras().getString("date");
 
 		new RequestTask().execute(Urls.URL_GET_NEWS_ITEM + id);
 	}
@@ -106,9 +101,9 @@ public class NewsActivity extends Activity {
 			progressBar.setVisibility(ProgressBar.VISIBLE);
 		}
 
-		String responseString = null;
 		@Override
 		protected String doInBackground(String... uri) {
+			String responseString = null;
 			HttpClient httpclient = new DefaultHttpClient();
 			HttpResponse response;
 			try {
@@ -145,7 +140,6 @@ public class NewsActivity extends Activity {
 				listView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,0));
 			}else if(newsItem.getImages().size() == 1){
 				listView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,0));
-
 				imageView.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
@@ -190,7 +184,7 @@ public class NewsActivity extends Activity {
 		super.onConfigurationChanged(newConfig);
 	}
 
-	class RequestOneImageTask extends AsyncTask<String, String, String>{
+	class RequestOneImageTask extends AsyncTask<String, String, Bitmap>{
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
@@ -198,9 +192,10 @@ public class NewsActivity extends Activity {
 		}
 
 		@Override
-		protected String doInBackground(String... uri) {
+		protected Bitmap doInBackground(String... uri) {
 			HttpClient httpclient = new DefaultHttpClient();
 			HttpResponse response;
+			Bitmap image = null;
 			try {
 				response = httpclient.execute(new HttpGet(uri[0]));
 				StatusLine statusLine = response.getStatusLine();
@@ -215,12 +210,12 @@ public class NewsActivity extends Activity {
 			} catch (IOException e) {
 				//TODO Handle problems
 			}
-			return null;
+			return image;
 		}
 
 		@Override
-		protected void onPostExecute(String result) {
-			super.onPostExecute(result);
+		protected void onPostExecute(Bitmap image) {
+			super.onPostExecute(image);
 			imageView.setVisibility(ImageView.VISIBLE);
 			if(image != null){
 				imageView.setImageBitmap(image);

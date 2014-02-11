@@ -45,6 +45,14 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
+	private static final String TYPE_WARNING = "warning";
+	private static final String TYPE_WARNING2 = "warning2";
+	private static final String TYPE_INFO = "info";
+	private static final String TYPE_QUESTION = "question";
+	private static final String TYPE_CHAT = "chat";
+	private static final String TYPE_ERROR = "error";
+	private static final String TYPE_PHOTOS = "photos";
+
 	private ListView listview;
 	private List<NewsListItem> list;
 	private Activity activity;
@@ -52,7 +60,6 @@ public class MainActivity extends Activity {
 	private ClientCursorAdapter cursorAdapter;
 	private NewsDataSource dataSources;
 	private Cursor cursor;
-	//private Intent intent;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -75,15 +82,9 @@ public class MainActivity extends Activity {
 			public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
 				Cursor cursor = (Cursor) listview.getItemAtPosition(position);
 				String newsid = cursor.getString(cursor.getColumnIndexOrThrow(NewsDataSQLHelper.NEWS_COLUMN_DB_ID));
-				String title = cursor.getString(cursor.getColumnIndexOrThrow(NewsDataSQLHelper.NEWS_COLUMN_TITLE));
-				String shorttext = cursor.getString(cursor.getColumnIndexOrThrow(NewsDataSQLHelper.NEWS_COLUMN_SHORTTEXT));
-				String date = cursor.getString(cursor.getColumnIndexOrThrow(NewsDataSQLHelper.NEWS_COLUMN_DATE));
 
 				Intent intent = new Intent(MainActivity.this, NewsActivity.class);
 				intent.putExtra("newsid", newsid);
-				intent.putExtra("title", title);
-				intent.putExtra("short", shorttext);
-				intent.putExtra("date", date);
 				startActivity(intent);
 			}
 		});
@@ -111,7 +112,6 @@ public class MainActivity extends Activity {
 			new RequestTask().execute(r);
 			break;
 		case R.id.action_start_sevice:
-			//intent = new Intent(this, RepeatingAlarmGetNewsService.class);
 			startService(new Intent(this, RepeatingAlarmGetNewsService.class));
 			break;
 		case R.id.action_stop_sevice:
@@ -135,9 +135,9 @@ public class MainActivity extends Activity {
 			progressBar.setVisibility(ProgressBar.VISIBLE);
 		}
 
-		String responseString = null;
 		@Override
 		protected String doInBackground(String... uri) {
+			String responseString = null;
 			HttpClient httpclient = new DefaultHttpClient();
 			HttpResponse response;
 			try {
@@ -190,15 +190,12 @@ public class MainActivity extends Activity {
 
 	public class ClientCursorAdapter extends ResourceCursorAdapter {
 		private LayoutInflater inflater=null;
-		private Cursor mCursor;
-		private Context mContext;
 
 		public ClientCursorAdapter(Context context, int layout, Cursor c, boolean flags) {
 			super(context, layout, c, flags);
 			inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			mCursor = c;
-			mContext = context;
 		}
+
 		@Override
 		public View newView(Context context, Cursor cursor, ViewGroup parent) {
 			return inflater.inflate(R.layout.row_item, parent, false);
@@ -216,8 +213,23 @@ public class MainActivity extends Activity {
 				date.setText(cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.NEWS_COLUMN_DATE)));
 				text.setText(cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.NEWS_COLUMN_SHORTTEXT)));
 				id.setText(cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.NEWS_COLUMN_DB_ID)));
-				if(cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.NEWS_COLUMN_TYPE)) != null && cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.NEWS_COLUMN_TYPE)).toLowerCase().equals("warn")){
+
+				if(cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.NEWS_COLUMN_TYPE)) == null){
+					image.setImageResource(R.drawable.info);
+				}else if(cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.NEWS_COLUMN_TYPE)).toLowerCase().equals(TYPE_WARNING)){
 					image.setImageResource(R.drawable.danger);
+				}else if(cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.NEWS_COLUMN_TYPE)).toLowerCase().equals(TYPE_QUESTION)){
+					image.setImageResource(R.drawable.question);
+				}else if(cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.NEWS_COLUMN_TYPE)).toLowerCase().equals(TYPE_CHAT)){
+					image.setImageResource(R.drawable.chat);
+				}else if(cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.NEWS_COLUMN_TYPE)).toLowerCase().equals(TYPE_WARNING2)){
+					image.setImageResource(R.drawable.danger2);
+				}else if(cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.NEWS_COLUMN_TYPE)).toLowerCase().equals(TYPE_ERROR)){
+					image.setImageResource(R.drawable.error);
+				}else if(cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.NEWS_COLUMN_TYPE)).toLowerCase().equals(TYPE_INFO)){
+					image.setImageResource(R.drawable.info);
+				}else if(cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.NEWS_COLUMN_TYPE)).toLowerCase().equals(TYPE_PHOTOS)){
+					image.setImageResource(R.drawable.photos);
 				}else{
 					image.setImageResource(R.drawable.info);
 				}

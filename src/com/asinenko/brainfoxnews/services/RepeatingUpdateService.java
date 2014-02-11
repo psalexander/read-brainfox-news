@@ -53,9 +53,9 @@ public class RepeatingUpdateService extends BroadcastReceiver{
 			super.onPreExecute();
 		}
 
-		String responseString = null;
 		@Override
 		protected String doInBackground(String... uri) {
+			String responseString = null;
 			HttpClient httpclient = new DefaultHttpClient();
 			HttpResponse response;
 			try {
@@ -67,7 +67,6 @@ public class RepeatingUpdateService extends BroadcastReceiver{
 					out.close();
 					responseString = out.toString();
 				} else{
-					//Closes the connection.
 					response.getEntity().getContent().close();
 					throw new IOException(statusLine.getReasonPhrase());
 				}
@@ -76,7 +75,6 @@ public class RepeatingUpdateService extends BroadcastReceiver{
 			} catch (IOException e) {
 				//TODO Handle problems
 			}
-
 			list = JsonParser.parseJSONtoNewsItem(responseString);
 			if(NewsListItem.errorcode.equals("0")){
 				dataSources.updateLastRequestTime(NewsListItem.timestamp);
@@ -107,9 +105,8 @@ public class RepeatingUpdateService extends BroadcastReceiver{
 				Intent intent2 = new Intent(context, MainActivity.class);
 				PendingIntent pIntent = PendingIntent.getActivity(context, 0, intent2, 0);
 				Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-
 				Notification n  = new Notification.Builder(context)
-					.setContentTitle("Добовление новости 1-А класса")
+					.setContentTitle("Новое уведомление 2-Б класса")
 					.setContentText(news.trim())
 					.setContentInfo(String.valueOf(list.size()))
 					.setSmallIcon(R.drawable.ic_action_email)
