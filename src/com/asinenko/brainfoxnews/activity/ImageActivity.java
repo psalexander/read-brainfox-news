@@ -1,6 +1,10 @@
 package com.asinenko.brainfoxnews.activity;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -19,12 +23,15 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 public class ImageActivity extends Activity {
 
@@ -32,6 +39,7 @@ public class ImageActivity extends Activity {
 	private String imageUrl;
 	private ProgressBar progressBar;
 	private Bitmap image = null;
+	private boolean isImageDownloaded = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +54,7 @@ public class ImageActivity extends Activity {
 		new RequestTask().execute(Urls.URL_GET_IMAGE + imageUrl);
 
 		//String imageFilePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/name.png";
-		//MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+		
 	}
 
 	class RequestTask extends AsyncTask<String, String, String>{
@@ -80,8 +88,10 @@ public class ImageActivity extends Activity {
 		@Override
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
-			if(image != null)
+			if(image != null){
 				imageView.setImageBitmap(image);
+				isImageDownloaded = true;
+			}
 			progressBar.setVisibility(ProgressBar.INVISIBLE);
 		}
 	}
@@ -101,7 +111,29 @@ public class ImageActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_save_image:
-			//save image here
+			if(isImageDownloaded && image != null){
+				String path = Environment.getExternalStorageDirectory().toString() + new java.sql.Timestamp(System.currentTimeMillis()).toString() + ".jpg";
+				OutputStream fOut = null;
+				File file = new File(path);
+				try {
+					fOut = new FileOutputStream(file);
+					image.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+					Toast.makeText(this, "Изображение сохранено: " + path, Toast.LENGTH_LONG).show();
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+					Toast.makeText(this, "Ошибка при сохранении", Toast.LENGTH_LONG).show();
+				}finally{
+					try {
+						fOut.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+//				String res = MediaStore.Images.Media.insertImage(getContentResolver(), image, new java.sql.Timestamp(System.currentTimeMillis()).toString() + ".jpg", "");
+//				Toast.makeText(this, res, 20000).show();
+			}else{
+				Toast.makeText(this, "Изображение не загружено. Сохранение возможно только после загрузки.", Toast.LENGTH_LONG).show();
+			}
 			break;
 		default:
 			break;
