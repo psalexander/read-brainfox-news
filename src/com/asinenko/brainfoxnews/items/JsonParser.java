@@ -20,6 +20,7 @@ public class JsonParser {
 	private static final String TAG_DATA = "data";
 	private static final String TAG_DATE = "date";
 	private static final String TAG_ERROR_CODE = "error_code";
+	private static final String TAG_TYPE = "type";
 
 	private static final String TAG_TEXT = "text";
 	private static final String TAG_IMAGES = "images";
@@ -29,7 +30,7 @@ public class JsonParser {
 		if (jsonStr != null) {
 			try {
 				JSONObject jsonObj = new JSONObject(jsonStr);
-				NewsItemJSON.errorcode = jsonObj.getString(TAG_ERROR_CODE);
+				NewsItemJSON.errorcode = String.valueOf(jsonObj.getInt(TAG_ERROR_CODE));
 				NewsItemJSON.timestamp = jsonObj.getString(TAG_TIMESTAMP);
 
 				JSONArray data = jsonObj.getJSONArray(TAG_DATA);
@@ -39,7 +40,8 @@ public class JsonParser {
 					String name = c.getString(TAG_TITLE);
 					String shorttext = c.getString(TAG_SHORTTEXT);
 					String date = c.getString(TAG_DATE);
-					NewsItemJSON it = new NewsItemJSON(id, name, shorttext, date);
+					String type = c.getString(TAG_TYPE);
+					NewsItemJSON it = new NewsItemJSON(id, name, shorttext, date, type);
 					list.add(it);
 				}
 			} catch (JSONException e) {
@@ -65,7 +67,8 @@ public class JsonParser {
 					String name = c.getString(TAG_TITLE);
 					String shorttext = c.getString(TAG_SHORTTEXT);
 					String date = c.getString(TAG_DATE);
-					NewsListItem it = new NewsListItem(id, name, shorttext, date);
+					String type = c.getString(TAG_TYPE);
+					NewsListItem it = new NewsListItem(id, name, shorttext, date, type);
 					list.add(it);
 				}
 			} catch (JSONException e) {

@@ -5,14 +5,16 @@ public class NewsListItem {
 	private String name;
 	private String date;
 	private String text;
+	private String type;
 	public static String timestamp;
 	public static String errorcode;
 
-	public NewsListItem(String id, String name, String text, String date) {
+	public NewsListItem(String id, String name, String text, String date, String type) {
 		this.id = id;
 		this.name = name;
 		this.date = date;
 		this.text = text;
+		this.type = type;
 	}
 
 	public String getId() {
@@ -38,5 +40,11 @@ public class NewsListItem {
 	}
 	public void setText(String text) {
 		this.text = text;
+	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
 	}
 }

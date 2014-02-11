@@ -5,15 +5,17 @@ public class NewsItemJSON {
 	private String name;
 	private String shorttext;
 	private String data;
+	private String type;
 	public static String timestamp;
 	public static String errorcode;
 
-	public NewsItemJSON(String id, String name, String shorttext, String data) {
+	public NewsItemJSON(String id, String name, String shorttext, String data, String type) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.shorttext = shorttext;
 		this.data = data;
+		this.type = type;
 	}
 	public String getId() {
 		return id;
@@ -39,5 +41,10 @@ public class NewsItemJSON {
 	public void setData(String data) {
 		this.data = data;
 	}
-
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
 }

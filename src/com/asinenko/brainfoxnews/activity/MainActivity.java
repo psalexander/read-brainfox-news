@@ -29,7 +29,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
-import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,6 +36,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.ResourceCursorAdapter;
@@ -103,11 +103,6 @@ public class MainActivity extends Activity {
 		return true;
 	}
 
-	private String getPhoneNumber(){
-		TelephonyManager tMgr =(TelephonyManager)this.getSystemService(Context.TELEPHONY_SERVICE);
-		return tMgr.getLine1Number();
-	}
-
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -149,7 +144,6 @@ public class MainActivity extends Activity {
 					out.close();
 					responseString = out.toString();
 				} else{
-					//Closes the connection.
 					response.getEntity().getContent().close();
 					throw new IOException(statusLine.getReasonPhrase());
 				}
@@ -182,6 +176,7 @@ public class MainActivity extends Activity {
 				n.setDate(it.getDate());
 				n.setTitle(it.getName());
 				n.setShorttext(it.getText());
+				n.setType(it.getType());
 				dataSources.createNewsItem(n);
 			}
 			cursor.requery();
@@ -212,11 +207,17 @@ public class MainActivity extends Activity {
 			TextView date = (TextView)view.findViewById(R.id.date);
 			TextView text = (TextView)view.findViewById(R.id.text);
 			TextView id = (TextView)view.findViewById(R.id.id);
+			ImageView image = (ImageView)view.findViewById(R.id.list_image);
 			if(cursor != null){
 				title.setText(cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.NEWS_COLUMN_TITLE)));
 				date.setText(cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.NEWS_COLUMN_DATE)));
 				text.setText(cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.NEWS_COLUMN_SHORTTEXT)));
 				id.setText(cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.NEWS_COLUMN_DB_ID)));
+				if(cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.NEWS_COLUMN_TYPE)) != null && cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.NEWS_COLUMN_TYPE)).toLowerCase().equals("warn")){
+					image.setImageResource(R.drawable.danger);
+				}else{
+					image.setImageResource(R.drawable.info);
+				}
 			}
 			notifyDataSetChanged();
 		}
