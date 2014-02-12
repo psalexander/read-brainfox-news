@@ -16,6 +16,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import com.asinenko.brainfoxnews.CheckConnection;
 import com.asinenko.brainfoxnews.R;
 import com.asinenko.brainfoxnews.Urls;
+import com.asinenko.brainfoxnews.views.MyImageView;
 
 import android.app.Activity;
 import android.content.res.Configuration;
@@ -34,7 +35,7 @@ import android.widget.Toast;
 
 public class ImageActivity extends Activity {
 
-	private ImageView imageView;
+	private MyImageView imageView;
 	private String imageUrl;
 	private ProgressBar progressBar;
 	private Bitmap image = null;
@@ -48,7 +49,7 @@ public class ImageActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_image);
-		imageView = (ImageView)findViewById(R.id.oneImageView);
+		imageView = (MyImageView)findViewById(R.id.oneImageView);
 		imageView.setAdjustViewBounds(true);
 		progressBar = (ProgressBar)findViewById(R.id.progressBar);
 		imageUrl = getIntent().getExtras().getString("url");
@@ -109,7 +110,7 @@ public class ImageActivity extends Activity {
 		getMenuInflater().inflate(R.menu.image, menu);
 		return true;
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {

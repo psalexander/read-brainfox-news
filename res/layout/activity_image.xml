@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ImageActivity" >
-    <ImageView 
+
+    <com.asinenko.brainfoxnews.views.MyImageView
         android:id="@+id/oneImageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
