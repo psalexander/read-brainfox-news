@@ -1,7 +1,6 @@
 package com.asinenko.brainfoxnews.activity;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -24,7 +23,6 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
@@ -52,9 +50,6 @@ public class ImageActivity extends Activity {
 		progressBar = (ProgressBar)findViewById(R.id.progressBar);
 		imageUrl = getIntent().getExtras().getString("url");
 		new RequestTask().execute(Urls.URL_GET_IMAGE + imageUrl);
-
-		//String imageFilePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/name.png";
-		
 	}
 
 	class RequestTask extends AsyncTask<String, String, String>{
@@ -112,25 +107,31 @@ public class ImageActivity extends Activity {
 		switch (item.getItemId()) {
 		case R.id.action_save_image:
 			if(isImageDownloaded && image != null){
-				String path = Environment.getExternalStorageDirectory().toString() + new java.sql.Timestamp(System.currentTimeMillis()).toString() + ".jpg";
+				String storage = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString();
+				String dir = storage + "/brainfox/";
+				File dirfile = new File(dir);
+				if(!dirfile.exists()){
+					dirfile.mkdir();
+				}
+				String path = dir + "/" + String.valueOf(System.currentTimeMillis()) + ".jpg";
 				OutputStream fOut = null;
 				File file = new File(path);
 				try {
 					fOut = new FileOutputStream(file);
 					image.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
 					Toast.makeText(this, "Изображение сохранено: " + path, Toast.LENGTH_LONG).show();
-				} catch (FileNotFoundException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 					Toast.makeText(this, "Ошибка при сохранении", Toast.LENGTH_LONG).show();
 				}finally{
 					try {
-						fOut.close();
+						if(fOut != null){
+							fOut.close();
+						}
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
 				}
-//				String res = MediaStore.Images.Media.insertImage(getContentResolver(), image, new java.sql.Timestamp(System.currentTimeMillis()).toString() + ".jpg", "");
-//				Toast.makeText(this, res, 20000).show();
 			}else{
 				Toast.makeText(this, "Изображение не загружено. Сохранение возможно только после загрузки.", Toast.LENGTH_LONG).show();
 			}

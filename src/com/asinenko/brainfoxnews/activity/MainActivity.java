@@ -159,7 +159,7 @@ public class MainActivity extends Activity {
 			}
 
 			list = JsonParser.parseJSONtoNewsItem(responseString);
-			if(NewsListItem.errorcode.equals("0")){
+			if(NewsListItem.errorcode != null && NewsListItem.errorcode.equals("0")){
 				dataSources.updateLastRequestTime(NewsListItem.timestamp);
 			}
 			return responseString;
@@ -168,7 +168,7 @@ public class MainActivity extends Activity {
 		@Override
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
-			if(!NewsListItem.errorcode.equals("0")){
+			if(NewsListItem.errorcode != null && !NewsListItem.errorcode.equals("0")){
 				Toast.makeText(getApplicationContext(), "Error code is " + NewsListItem.errorcode, Toast.LENGTH_SHORT).show();
 			}else{
 				Toast.makeText(getApplicationContext(), String.valueOf(list.size()), Toast.LENGTH_SHORT).show();
