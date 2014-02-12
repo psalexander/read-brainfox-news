@@ -12,9 +12,11 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import com.asinenko.brainfoxnews.CheckConnection;
 import com.asinenko.brainfoxnews.R;
 import com.asinenko.brainfoxnews.Urls;
 import com.asinenko.brainfoxnews.activity.MainActivity;
+import com.asinenko.brainfoxnews.activity.NewsActivity;
 import com.asinenko.brainfoxnews.db.NewsDataSource;
 import com.asinenko.brainfoxnews.items.JsonParser;
 import com.asinenko.brainfoxnews.items.NewsListItem;
@@ -29,6 +31,8 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
 
 public class RepeatingUpdateService extends BroadcastReceiver{
@@ -40,10 +44,12 @@ public class RepeatingUpdateService extends BroadcastReceiver{
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		this.context = context;
-		dataSources = new NewsDataSource(context);
-		dataSources.open();
-		String r = Urls.URL_GET_NEWS_LIST + dataSources.getLastRequestTime();
-		new RequestTask().execute(r);
+		if(CheckConnection.isOnline(context)){
+			dataSources = new NewsDataSource(context);
+			dataSources.open();
+			String r = Urls.URL_GET_NEWS_LIST + dataSources.getLastRequestTime();
+			new RequestTask().execute(r);
+		}
 		Toast.makeText(context, "It's Service Time!", Toast.LENGTH_LONG).show();
 	}
 
@@ -71,9 +77,9 @@ public class RepeatingUpdateService extends BroadcastReceiver{
 					throw new IOException(statusLine.getReasonPhrase());
 				}
 			} catch (ClientProtocolException e) {
-				//TODO Handle problems
+				Toast.makeText(context, "При загрузке данных произошла ошибка.", Toast.LENGTH_LONG).show();
 			} catch (IOException e) {
-				//TODO Handle problems
+				Toast.makeText(context, "При загрузке данных произошла ошибка.", Toast.LENGTH_LONG).show();
 			}
 			list = JsonParser.parseJSONtoNewsItem(responseString);
 			if(NewsListItem.errorcode.equals("0")){
@@ -86,7 +92,7 @@ public class RepeatingUpdateService extends BroadcastReceiver{
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
 			if(!NewsListItem.errorcode.equals("0")){
-				Toast.makeText(context, "Error code is " + NewsListItem.errorcode, Toast.LENGTH_SHORT).show();
+				Toast.makeText(context, "Ошибка. Код ошибки " + NewsListItem.errorcode, Toast.LENGTH_SHORT).show();
 			}else{
 				Toast.makeText(context, String.valueOf(list.size()), Toast.LENGTH_SHORT).show();
 			}
@@ -102,19 +108,38 @@ public class RepeatingUpdateService extends BroadcastReceiver{
 				news = news + " " + it.getName();
 			}
 			if(list.size() > 0){
-				Intent intent2 = new Intent(context, MainActivity.class);
-				PendingIntent pIntent = PendingIntent.getActivity(context, 0, intent2, 0);
 				Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-				Notification n  = new Notification.Builder(context)
-					.setContentTitle("Новое уведомление 2-Б класса")
+				Intent intent2 = new Intent(context, MainActivity.class);
+				
+				Intent newsintent = new Intent(context, NewsActivity.class);
+				newsintent.putExtra("newsid", list.get(list.size() - 1).getId());
+
+				PendingIntent newIntent = PendingIntent.getActivity(context, 0, newsintent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+				PendingIntent pIntent = PendingIntent.getActivity(context, 0, intent2, 0);
+				if(Build.VERSION.SDK_INT >= 11){
+					Notification n  = new Notification.Builder(context)
+						.setContentTitle(context.getResources().getString(R.string.title_notification))
+						.setContentText(news.trim())
+						.setContentInfo(String.valueOf(list.size()))
+						.setSmallIcon(R.drawable.ic_action_email)
+						.setSound(alarmSound)
+						.setContentIntent(newIntent)
+						.setAutoCancel(true).build();
+					NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+					notificationManager.notify(0, n);
+				}else{
+					NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
 					.setContentText(news.trim())
-					.setContentInfo(String.valueOf(list.size()))
-					.setSmallIcon(R.drawable.ic_action_email)
+					.setContentTitle(context.getResources().getString(R.string.title_notification))
+					.setOngoing(true)
 					.setSound(alarmSound)
-					.setContentIntent(pIntent)
-					.setAutoCancel(true).build();
-				NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-				notificationManager.notify(0, n);
+					.setContentIntent(newIntent)
+					.setSmallIcon(R.drawable.ic_action_email);
+					Notification notif = builder.build();
+					NotificationManager mN = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+					mN.notify(1, notif);
+				}
 			}
 			dataSources.close();
 		}

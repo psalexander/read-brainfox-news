@@ -13,6 +13,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import com.asinenko.brainfoxnews.CheckConnection;
 import com.asinenko.brainfoxnews.R;
 import com.asinenko.brainfoxnews.Urls;
 import com.asinenko.brainfoxnews.db.NewsDataSQLHelper;
@@ -89,8 +90,12 @@ public class MainActivity extends Activity {
 			}
 		});
 
-		String r = Urls.URL_GET_NEWS_LIST + dataSources.getLastRequestTime();
-		new RequestTask().execute(r);
+		if(CheckConnection.isOnline(this)){
+			String r = Urls.URL_GET_NEWS_LIST + dataSources.getLastRequestTime();
+			new RequestTask().execute(r);
+		}else{
+			Toast.makeText(this, "Отсутствует соединение с сетью интернет.", Toast.LENGTH_LONG).show();
+		}
 	}
 
 	@Override
@@ -108,8 +113,12 @@ public class MainActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_refresh:
-			String r = Urls.URL_GET_NEWS_LIST + dataSources.getLastRequestTime();
-			new RequestTask().execute(r);
+			if(CheckConnection.isOnline(this)){
+				String r = Urls.URL_GET_NEWS_LIST + dataSources.getLastRequestTime();
+				new RequestTask().execute(r);
+			}else{
+				Toast.makeText(this, "Отсутствует соединение с сетью интернет.", Toast.LENGTH_LONG).show();
+			}
 			break;
 		case R.id.action_start_sevice:
 			startService(new Intent(this, RepeatingAlarmGetNewsService.class));
@@ -153,11 +162,10 @@ public class MainActivity extends Activity {
 					throw new IOException(statusLine.getReasonPhrase());
 				}
 			} catch (ClientProtocolException e) {
-				//TODO Handle problems
+				Toast.makeText(activity, "При загрузке данных произошла ошибка", Toast.LENGTH_LONG).show();
 			} catch (IOException e) {
-				//TODO Handle problems
+				Toast.makeText(activity, "При загрузке данных произошла ошибка.", Toast.LENGTH_LONG).show();
 			}
-
 			list = JsonParser.parseJSONtoNewsItem(responseString);
 			if(NewsListItem.errorcode != null && NewsListItem.errorcode.equals("0")){
 				dataSources.updateLastRequestTime(NewsListItem.timestamp);
@@ -182,8 +190,8 @@ public class MainActivity extends Activity {
 				n.setType(it.getType());
 				dataSources.createNewsItem(n);
 			}
-			cursor.requery();
-			cursorAdapter.notifyDataSetChanged();
+			cursor = dataSources.getNewsCursor();
+			cursorAdapter.changeCursor(cursor);
 			progressBar.setVisibility(ProgressBar.INVISIBLE);
 		}
 	}

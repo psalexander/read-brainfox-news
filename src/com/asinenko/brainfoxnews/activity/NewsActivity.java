@@ -13,6 +13,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import com.asinenko.brainfoxnews.CheckConnection;
 import com.asinenko.brainfoxnews.HorizontalListView;
 import com.asinenko.brainfoxnews.LazyAdapter;
 import com.asinenko.brainfoxnews.R;
@@ -21,6 +22,7 @@ import com.asinenko.brainfoxnews.items.JsonParser;
 import com.asinenko.brainfoxnews.items.NewsItem;
 
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
@@ -38,6 +40,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class NewsActivity extends Activity {
@@ -49,17 +52,9 @@ public class NewsActivity extends Activity {
 	private TextView dateTextView;
 	private ProgressBar progressBar;
 	private ImageView imageView;
-
 	private Activity activity;
-
 	private String id;
-//	private String title;
-//	private String firsttext;
-//	private String mainText;
-//	private String date;
-
 	private NewsItem newsItem;
-
 	private int displayWidth;
 	private int displayHeigth;
 	private int imageWidth;
@@ -69,10 +64,8 @@ public class NewsActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_news);
 		activity = this;
-
 		listView = (HorizontalListView) findViewById(R.id.imageListView);
 		imageView = (ImageView) findViewById(R.id.oneImageNewsView);
-
 		titleTextView = (TextView)findViewById(R.id.titleTextView);
 		shortTextView = (TextView)findViewById(R.id.shortTextView);
 		mainTextView = (TextView)findViewById(R.id.mainTextView);
@@ -81,17 +74,24 @@ public class NewsActivity extends Activity {
 		progressBar.setVisibility(ProgressBar.INVISIBLE);
 
 		Display display =  ((WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-		Point size = new Point();
-		display.getSize(size);
-		displayWidth = size.x;
-		displayHeigth = size.y;
+		if(Build.VERSION.SDK_INT >= 13){
+			Point size = new Point();
+			display.getSize(size);
+			displayWidth = size.x;
+			displayHeigth = size.y;
+		}else{
+			displayWidth = display.getWidth();
+			displayHeigth = display.getHeight();
+		}
 		imageWidth = displayWidth;
 		if(displayHeigth < displayWidth)
 			imageWidth = displayHeigth;
-
 		id = getIntent().getExtras().getString("newsid");
-
-		new RequestTask().execute(Urls.URL_GET_NEWS_ITEM + id);
+		if(CheckConnection.isOnline(this)){
+			new RequestTask().execute(Urls.URL_GET_NEWS_ITEM + id);
+		}else{
+			Toast.makeText(this, "Отсутствует соединение с сетью интернет.", Toast.LENGTH_LONG).show();
+		}
 	}
 
 	class RequestTask extends AsyncTask<String, String, String>{
@@ -119,9 +119,9 @@ public class NewsActivity extends Activity {
 					throw new IOException(statusLine.getReasonPhrase());
 				}
 			} catch (ClientProtocolException e) {
-				//TODO Handle problems..
+				Toast.makeText(activity, "При загрузке списка новостей произошла ошибка", Toast.LENGTH_LONG).show();
 			} catch (IOException e) {
-				//TODO Handle problems..
+				Toast.makeText(activity, "При загрузке списка новостей произошла ошибка", Toast.LENGTH_LONG).show();
 			}
 			newsItem = JsonParser.parseNewsItem(id, responseString);
 			return responseString;
@@ -206,9 +206,9 @@ public class NewsActivity extends Activity {
 					throw new IOException(statusLine.getReasonPhrase());
 				}
 			} catch (ClientProtocolException e) {
-				//TODO Handle problems
+				Toast.makeText(activity, "При загрузке изображения произошла ошибка", Toast.LENGTH_LONG).show();
 			} catch (IOException e) {
-				//TODO Handle problems
+				Toast.makeText(activity, "При загрузке изображения произошла ошибка", Toast.LENGTH_LONG).show();
 			}
 			return image;
 		}

@@ -39,6 +39,7 @@ import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.Scroller;
 
@@ -143,6 +144,7 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
 
 	private void addAndMeasureChild(final View child, int viewPos) {
 		LayoutParams params = child.getLayoutParams();
+		//child.setScaleType( ImageView.ScaleType.CENTER_CROP);
 		if(params == null) {
 			params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 			//params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);

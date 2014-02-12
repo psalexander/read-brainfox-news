@@ -39,6 +39,7 @@ public class LazyAdapter extends BaseAdapter{
 			vi = inflater.inflate(R.layout.image_item, null);
 		}
 		ImageView image=(ImageView)vi.findViewById(R.id.imageRowView);
+		image.setScaleType(ImageView.ScaleType.CENTER_CROP);
 		imageLoader.DisplayImage(data[position], image);
 		return vi;
 	}

@@ -13,6 +13,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import com.asinenko.brainfoxnews.CheckConnection;
 import com.asinenko.brainfoxnews.R;
 import com.asinenko.brainfoxnews.Urls;
 
@@ -38,10 +39,12 @@ public class ImageActivity extends Activity {
 	private ProgressBar progressBar;
 	private Bitmap image = null;
 	private boolean isImageDownloaded = false;
+	private Activity activity;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		activity = this;
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_image);
@@ -49,7 +52,12 @@ public class ImageActivity extends Activity {
 		imageView.setAdjustViewBounds(true);
 		progressBar = (ProgressBar)findViewById(R.id.progressBar);
 		imageUrl = getIntent().getExtras().getString("url");
-		new RequestTask().execute(Urls.URL_GET_IMAGE + imageUrl);
+
+		if(CheckConnection.isOnline(this)){
+			new RequestTask().execute(Urls.URL_GET_IMAGE + imageUrl);
+		}else{
+			Toast.makeText(this, "Отсутствует соединение с сетью интернет.", Toast.LENGTH_LONG).show();
+		}
 	}
 
 	class RequestTask extends AsyncTask<String, String, String>{
@@ -73,9 +81,9 @@ public class ImageActivity extends Activity {
 					throw new IOException(statusLine.getReasonPhrase());
 				}
 			} catch (ClientProtocolException e) {
-				//TODO Handle problems
+				Toast.makeText(activity, "При загрузке данных произошла ошибка.", Toast.LENGTH_LONG).show();
 			} catch (IOException e) {
-				//TODO Handle problems
+				Toast.makeText(activity, "При загрузке данных произошла ошибка.", Toast.LENGTH_LONG).show();
 			}
 			return null;
 		}
