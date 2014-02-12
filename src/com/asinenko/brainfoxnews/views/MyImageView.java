@@ -2,7 +2,6 @@ package com.asinenko.brainfoxnews.views;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -44,7 +43,6 @@ public class MyImageView extends ImageView{
 		if(this.getDrawable() != null){
 			this.getDrawable().draw(canvas);
 		}
-		//getImageMatrix().preScale(mScaleFactor, mScaleFactor);
 		canvas.restore();
 	}
 

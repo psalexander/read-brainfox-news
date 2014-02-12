@@ -109,14 +109,9 @@ public class RepeatingUpdateService extends BroadcastReceiver{
 			}
 			if(list.size() > 0){
 				Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-				Intent intent2 = new Intent(context, MainActivity.class);
-				
 				Intent newsintent = new Intent(context, NewsActivity.class);
 				newsintent.putExtra("newsid", list.get(list.size() - 1).getId());
-
 				PendingIntent newIntent = PendingIntent.getActivity(context, 0, newsintent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-				PendingIntent pIntent = PendingIntent.getActivity(context, 0, intent2, 0);
 				if(Build.VERSION.SDK_INT >= 11){
 					Notification n  = new Notification.Builder(context)
 						.setContentTitle(context.getResources().getString(R.string.title_notification))
@@ -130,12 +125,12 @@ public class RepeatingUpdateService extends BroadcastReceiver{
 					notificationManager.notify(0, n);
 				}else{
 					NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-					.setContentText(news.trim())
-					.setContentTitle(context.getResources().getString(R.string.title_notification))
-					.setOngoing(true)
-					.setSound(alarmSound)
-					.setContentIntent(newIntent)
-					.setSmallIcon(R.drawable.ic_action_email);
+						.setContentText(news.trim())
+						.setContentTitle(context.getResources().getString(R.string.title_notification))
+						.setOngoing(true)
+						.setSound(alarmSound)
+						.setContentIntent(newIntent)
+						.setSmallIcon(R.drawable.ic_action_email);
 					Notification notif = builder.build();
 					NotificationManager mN = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
 					mN.notify(1, notif);

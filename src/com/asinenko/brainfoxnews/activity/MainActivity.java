@@ -83,7 +83,6 @@ public class MainActivity extends Activity {
 			public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
 				Cursor cursor = (Cursor) listview.getItemAtPosition(position);
 				String newsid = cursor.getString(cursor.getColumnIndexOrThrow(NewsDataSQLHelper.NEWS_COLUMN_DB_ID));
-
 				Intent intent = new Intent(MainActivity.this, NewsActivity.class);
 				intent.putExtra("newsid", newsid);
 				startActivity(intent);
@@ -197,6 +196,7 @@ public class MainActivity extends Activity {
 	}
 
 	public class ClientCursorAdapter extends ResourceCursorAdapter {
+
 		private LayoutInflater inflater=null;
 
 		public ClientCursorAdapter(Context context, int layout, Cursor c, boolean flags) {
