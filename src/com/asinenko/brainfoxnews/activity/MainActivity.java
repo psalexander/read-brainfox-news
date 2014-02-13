@@ -125,6 +125,9 @@ public class MainActivity extends Activity {
 		case R.id.action_stop_sevice:
 			stopService(new Intent(MainActivity.this, RepeatingAlarmGetNewsService.class));
 			break;
+		case R.id.action_about:
+			startActivity(new Intent(MainActivity.this, AboutActivity.class));
+			break;
 		case R.id.action_exit:
 			stopService(new Intent(MainActivity.this, RepeatingAlarmGetNewsService.class));
 			super.onDestroy();
