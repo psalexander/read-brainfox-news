@@ -1,8 +1,6 @@
 package com.asinenko.brainfoxnews.activity;
 
 import com.asinenko.brainfoxnews.R;
-import com.asinenko.brainfoxnews.R.layout;
-import com.asinenko.brainfoxnews.R.menu;
 
 import android.os.Bundle;
 import android.app.Activity;
