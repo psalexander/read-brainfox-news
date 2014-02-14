@@ -6,4 +6,7 @@
     <string name="title_activity_news">Новость</string>
     <string name="title_activity_image"></string>
     <string name="title_notification">Новое уведомление 2-Б класса</string>
+    <string name="title_activity_about">AboutActivity</string>
+    <string name="hello_world">Hello world!</string>
+
 </resources>
