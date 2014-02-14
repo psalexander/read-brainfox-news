@@ -55,7 +55,7 @@
             android:id="@+id/dateTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="2dp"
+            android:layout_marginRight="7dp"
             android:text=""
             android:layout_gravity="right"
             android:textStyle="italic"

@@ -40,9 +40,9 @@ public class MyImageView extends ImageView{
 		canvas.save();
 		canvas.scale(mScaleFactor, mScaleFactor);
 
-		if(this.getDrawable() != null){
-			this.getDrawable().draw(canvas);
-		}
+//		if(this.getDrawable() != null){
+//			this.getDrawable().draw(canvas);
+//		}
 		canvas.restore();
 	}
 
@@ -51,7 +51,6 @@ public class MyImageView extends ImageView{
 		public boolean onScale(ScaleGestureDetector detector) {
 			mScaleFactor *= detector.getScaleFactor();
 			mScaleFactor = Math.max(0.1f, Math.min(mScaleFactor, 5.0f));
-			Log.w("1111111111111",String.valueOf(mScaleFactor));
 			invalidate();
 			return true;
 		}
