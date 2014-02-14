@@ -15,7 +15,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import com.asinenko.brainfoxnews.CheckConnection;
 import com.asinenko.brainfoxnews.R;
 import com.asinenko.brainfoxnews.Urls;
-import com.asinenko.brainfoxnews.activity.MainActivity;
 import com.asinenko.brainfoxnews.activity.NewsActivity;
 import com.asinenko.brainfoxnews.db.NewsDataSource;
 import com.asinenko.brainfoxnews.items.JsonParser;
@@ -33,6 +32,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.widget.Toast;
 
 public class RepeatingUpdateService extends BroadcastReceiver{
@@ -106,6 +106,9 @@ public class RepeatingUpdateService extends BroadcastReceiver{
 				n.setType(it.getType());
 				dataSources.createNewsItem(n);
 				news = news + " " + it.getName();
+			}
+			for(String id : NewsListItem.deleted){
+				dataSources.deleteNews(id);
 			}
 			if(list.size() > 0){
 				Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);

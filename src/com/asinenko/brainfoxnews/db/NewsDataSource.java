@@ -74,6 +74,11 @@ public class NewsDataSource {
 		cursor.close();
 		return resp;
 	}
+
+	public void deleteNews(String id) {
+		database.delete(NewsDataSQLHelper.TABLE_NEWS, NewsDataSQLHelper.NEWS_COLUMN_DB_ID + " = " + id, null);
+	}
+
 	public int updateLastRequestTime(String time) {
 		ContentValues values = new ContentValues();
 		values.put(NewsDataSQLHelper.SETTINGS_COLUMN_VALUE, time);

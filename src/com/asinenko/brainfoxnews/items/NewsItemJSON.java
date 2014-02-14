@@ -1,11 +1,15 @@
 package com.asinenko.brainfoxnews.items;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class NewsItemJSON {
 	private String id;
 	private String name;
 	private String shorttext;
 	private String data;
 	private String type;
+	public static List<String> deleted = new LinkedList<String>();
 	public static String timestamp;
 	public static String errorcode;
 

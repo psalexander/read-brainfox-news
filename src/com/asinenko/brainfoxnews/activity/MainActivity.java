@@ -30,6 +30,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -179,7 +180,7 @@ public class MainActivity extends Activity {
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
 			if(NewsListItem.errorcode != null && !NewsListItem.errorcode.equals("0")){
-				Toast.makeText(getApplicationContext(), "Error code is " + NewsListItem.errorcode, Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), "Ошибка сервера " + NewsListItem.errorcode, Toast.LENGTH_SHORT).show();
 			}else{
 				Toast.makeText(getApplicationContext(), String.valueOf(list.size()), Toast.LENGTH_SHORT).show();
 			}
@@ -191,6 +192,9 @@ public class MainActivity extends Activity {
 				n.setShorttext(it.getText());
 				n.setType(it.getType());
 				dataSources.createNewsItem(n);
+			}
+			for(String id : NewsListItem.deleted){
+				dataSources.deleteNews(id);
 			}
 			cursor = dataSources.getNewsCursor();
 			cursorAdapter.changeCursor(cursor);

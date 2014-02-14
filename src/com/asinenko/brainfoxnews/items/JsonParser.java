@@ -22,37 +22,11 @@ public class JsonParser {
 	private static final String TAG_TYPE = "type";
 	private static final String TAG_TEXT = "text";
 	private static final String TAG_IMAGES = "images";
-
-	public static List<NewsItemJSON> parseJSONtoNewsItemJSON(String jsonStr){
-		List<NewsItemJSON> list = new ArrayList<NewsItemJSON>();
-		if (jsonStr != null) {
-			try {
-				JSONObject jsonObj = new JSONObject(jsonStr);
-				NewsItemJSON.errorcode = String.valueOf(jsonObj.getInt(TAG_ERROR_CODE));
-				NewsItemJSON.timestamp = jsonObj.getString(TAG_TIMESTAMP);
-
-				JSONArray data = jsonObj.getJSONArray(TAG_DATA);
-				for (int i = 0; i < data.length(); i++) {
-					JSONObject c = data.getJSONObject(i);
-					String id = c.getString(TAG_ID);
-					String name = c.getString(TAG_TITLE);
-					String shorttext = c.getString(TAG_SHORTTEXT);
-					String date = c.getString(TAG_DATE);
-					String type = c.getString(TAG_TYPE);
-					NewsItemJSON it = new NewsItemJSON(id, name, shorttext, date, type);
-					list.add(it);
-				}
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-		} else {
-			Log.e("ServiceHandler", "Couldn't get any data from the url");
-		}
-		return list;
-	}
+	private static final String TAG_DELETED = "deleted";
 
 	public static List<NewsListItem> parseJSONtoNewsItem(String jsonStr){
 		List<NewsListItem> list = new ArrayList<NewsListItem>();
+		NewsListItem.deleted.clear();
 		if (jsonStr != null) {
 			try {
 				JSONObject jsonObj = new JSONObject(jsonStr);
@@ -68,6 +42,11 @@ public class JsonParser {
 					String type = c.getString(TAG_TYPE);
 					NewsListItem it = new NewsListItem(id, name, shorttext, date, type);
 					list.add(it);
+				}
+				JSONArray deleted = jsonObj.getJSONArray(TAG_DELETED);
+				for (int i = 0; i < deleted.length(); i++) {
+					JSONObject c = deleted.getJSONObject(i);
+					NewsListItem.deleted.add(c.getString(TAG_ID));
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();
