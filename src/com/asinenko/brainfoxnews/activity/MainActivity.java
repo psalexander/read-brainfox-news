@@ -197,7 +197,7 @@ public class MainActivity extends Activity {
 
 	public class ClientCursorAdapter extends ResourceCursorAdapter {
 
-		private LayoutInflater inflater=null;
+		private LayoutInflater inflater = null;
 
 		public ClientCursorAdapter(Context context, int layout, Cursor c, boolean flags) {
 			super(context, layout, c, flags);
