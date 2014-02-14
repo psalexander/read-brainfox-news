@@ -5,5 +5,5 @@
         android:id="@+id/action_save_image"
         android:orderInCategory="100"
         android:showAsAction="never"
-        android:title="Сохранить"/>
+        android:title="@string/action_save_image"/>
 </menu>
