@@ -51,6 +51,7 @@
         </activity>
         <activity
             android:name="com.asinenko.brainfoxnews.activity.AboutActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_about" >
         </activity>
     </application>

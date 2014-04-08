@@ -8,35 +8,50 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".AboutActivity" >
 
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40sp"
+        android:layout_marginBottom="40sp"
+        android:layout_above="@+id/linearLayout1"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/brain" />
+
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
+        android:layout_below="@+id/linearLayout1"
         android:orientation="vertical" >
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Разработчики:" />
+            android:gravity="center"
+            android:text="Разработчики"
+            android:textStyle="bold" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:text="Баклыков Денис" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:text="Асиненко Александр" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="email: alexander@asinenko.com" />
+            android:gravity="center"
+            android:text="alexander@asinenko.com" />
     </LinearLayout>
 
     <LinearLayout
@@ -48,34 +63,38 @@
         android:orientation="vertical" >
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Классный руководитель:" />
+            android:gravity="center"
+            android:textStyle="bold"
+            android:text="Классный руководитель" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:text="Зимин Виталий Константинович" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/teacherMailTextView"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="email: unk_38@bk.ru" />
+            android:gravity="center"
+            android:clickable="true"
+            android:text="unk_38@bk.ru" />
+
+        <Button
+            android:id="@+id/sendMailButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20sp"
+            android:text="Написать руководителю" />
 
         <Button
             android:id="@+id/callButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="20sp"
             android:text="Позвонить руководителю" />
     </LinearLayout>
-
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/linearLayout1"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="50dp"
-        android:src="@drawable/ic_fox_icon_1" />
-
 </RelativeLayout>

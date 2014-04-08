@@ -9,10 +9,13 @@ import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class AboutActivity extends Activity implements android.view.View.OnClickListener{
 
 	private Button callButton;
+	private Button sendMailButton;
+	private TextView teacherMail;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +23,10 @@ public class AboutActivity extends Activity implements android.view.View.OnClick
 		setContentView(R.layout.activity_about);
 		callButton = (Button)findViewById(R.id.callButton);
 		callButton.setOnClickListener(this);
+		sendMailButton = (Button)findViewById(R.id.sendMailButton);
+		sendMailButton.setOnClickListener(this);
+		teacherMail = (TextView)findViewById(R.id.teacherMailTextView);
+		teacherMail.setOnClickListener(this);
 	}
 
 	@Override
@@ -30,9 +37,21 @@ public class AboutActivity extends Activity implements android.view.View.OnClick
 
 	@Override
 	public void onClick(View v) {
-		if(v.getId() == R.id.callButton){
+		switch(v.getId()){
+		case R.id.callButton:
 			Intent dialIntent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "+79853837742"));
 			startActivity(dialIntent);
+			break;
+		case R.id.sendMailButton:
+			Intent shareIntent = new Intent(Intent.ACTION_SEND);
+			shareIntent.setType("text/plain");
+			shareIntent.putExtra(Intent.EXTRA_SUBJECT, "");
+			shareIntent.putExtra(Intent.EXTRA_TEXT, "");
+			shareIntent.putExtra(Intent.EXTRA_EMAIL, new String[] { teacherMail.getText().toString() });
+			startActivity(Intent.createChooser(shareIntent, "Написать письмо."));
+			break;
+		default:
+				break;
 		}
 	}
 }
