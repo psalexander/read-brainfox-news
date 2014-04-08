@@ -248,9 +248,9 @@ public class MainActivity extends Activity {
 				}else if(cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.NEWS_COLUMN_TYPE)).toLowerCase().equals(TYPE_INCLASS)){
 					image.setImageResource(R.drawable.info);
 				}else if(cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.NEWS_COLUMN_TYPE)).toLowerCase().equals(TYPE_SCHOOL)){
-					image.setImageResource(R.drawable.chat);
+					image.setImageResource(R.drawable.danger2);
 				}else if(cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.NEWS_COLUMN_TYPE)).toLowerCase().equals(TYPE_SPORT)){
-					image.setImageResource(R.drawable.photos);
+					image.setImageResource(R.drawable.international_olympic_committee_icon);
 				}else if(cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.NEWS_COLUMN_TYPE)).toLowerCase().equals(TYPE_ALERT)){
 					image.setImageResource(R.drawable.danger);
 //				}else if(cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.NEWS_COLUMN_TYPE)).toLowerCase().equals(TYPE_WARNING)){
