@@ -48,7 +48,7 @@ public class AboutActivity extends Activity implements android.view.View.OnClick
 			shareIntent.putExtra(Intent.EXTRA_SUBJECT, "");
 			shareIntent.putExtra(Intent.EXTRA_TEXT, "");
 			shareIntent.putExtra(Intent.EXTRA_EMAIL, new String[] { teacherMail.getText().toString() });
-			startActivity(Intent.createChooser(shareIntent, "Написать письмо."));
+			startActivity(Intent.createChooser(shareIntent, "Написать письмо"));
 			break;
 		default:
 				break;
