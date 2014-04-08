@@ -88,8 +88,10 @@ public class MainActivity extends Activity {
 			public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
 				Cursor cursor = (Cursor) listview.getItemAtPosition(position);
 				String newsid = cursor.getString(cursor.getColumnIndexOrThrow(NewsDataSQLHelper.NEWS_COLUMN_DB_ID));
+				String type = cursor.getString(cursor.getColumnIndexOrThrow(NewsDataSQLHelper.NEWS_COLUMN_TYPE));
 				Intent intent = new Intent(MainActivity.this, NewsActivity.class);
 				intent.putExtra("newsid", newsid);
+				intent.putExtra("type", type);
 				startActivity(intent);
 			}
 		});

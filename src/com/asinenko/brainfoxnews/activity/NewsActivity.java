@@ -54,6 +54,7 @@ public class NewsActivity extends Activity {
 	private ImageView imageView;
 	private Activity activity;
 	private String id;
+	private String type;
 	private NewsItem newsItem;
 	private int displayWidth;
 	private int displayHeigth;
@@ -87,6 +88,7 @@ public class NewsActivity extends Activity {
 		if(displayHeigth < displayWidth)
 			imageWidth = displayHeigth;
 		id = getIntent().getExtras().getString("newsid");
+		type = getIntent().getExtras().getString("type");
 		if(CheckConnection.isOnline(this)){
 			new RequestTask().execute(Urls.URL_GET_NEWS_ITEM + id);
 		}else{
@@ -99,6 +101,7 @@ public class NewsActivity extends Activity {
 		protected void onPreExecute() {
 			super.onPreExecute();
 			progressBar.setVisibility(ProgressBar.VISIBLE);
+			setTitle(type);
 		}
 
 		@Override
