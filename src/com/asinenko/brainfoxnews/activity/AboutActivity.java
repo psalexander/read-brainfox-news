@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class AboutActivity extends Activity implements android.view.View.OnClickListener{
@@ -16,6 +17,8 @@ public class AboutActivity extends Activity implements android.view.View.OnClick
 	private Button callButton;
 	private Button sendMailButton;
 	private TextView teacherMail;
+	private ImageView imageView;
+	private int clickCount = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +30,8 @@ public class AboutActivity extends Activity implements android.view.View.OnClick
 		sendMailButton.setOnClickListener(this);
 		teacherMail = (TextView)findViewById(R.id.teacherMailTextView);
 		teacherMail.setOnClickListener(this);
+		imageView = (ImageView)findViewById(R.id.brainImageView);
+		imageView.setOnClickListener(this);
 	}
 
 	@Override
@@ -49,6 +54,14 @@ public class AboutActivity extends Activity implements android.view.View.OnClick
 			shareIntent.putExtra(Intent.EXTRA_TEXT, "");
 			shareIntent.putExtra(Intent.EXTRA_EMAIL, new String[] { teacherMail.getText().toString() });
 			startActivity(Intent.createChooser(shareIntent, "Написать письмо"));
+			break;
+		case R.id.brainImageView:
+			clickCount++;
+			if(clickCount > 10 && clickCount < 15){
+				imageView.setImageResource(R.drawable.peter_griffin_finished);
+			}else if(clickCount > 15){
+				imageView.setImageResource(R.drawable.peter_griffin_naked);
+			}
 			break;
 		default:
 				break;

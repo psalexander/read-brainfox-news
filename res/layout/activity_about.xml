@@ -5,28 +5,47 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingTop="20sp"
     tools:context=".AboutActivity" >
 
     <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40sp"
-        android:layout_marginBottom="40sp"
+        android:id="@+id/brainImageView"
+        android:layout_width="440sp"
+        android:layout_height="632sp"
         android:layout_above="@+id/linearLayout1"
         android:layout_centerHorizontal="true"
         android:src="@drawable/brain" />
 
     <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="wrap_content"
+        android:id="@+id/linearLayout1"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/linearLayout1"
-        android:orientation="vertical" >
+        android:layout_alignLeft="@+id/linearLayout2"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"
+        android:paddingTop="20sp" >
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:text="Классный руководитель" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Зимин Виталий Константинович" />
+
+        <TextView
+            android:id="@+id/teacherMailTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:clickable="true"
+            android:text="unk_38@bk.ru" />
+        
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -52,36 +71,6 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="alexander@asinenko.com" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/linearLayout2"
-        android:layout_centerVertical="true"
-        android:orientation="vertical" >
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:text="Классный руководитель" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Зимин Виталий Константинович" />
-
-        <TextView
-            android:id="@+id/teacherMailTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:clickable="true"
-            android:text="unk_38@bk.ru" />
 
         <Button
             android:id="@+id/sendMailButton"
