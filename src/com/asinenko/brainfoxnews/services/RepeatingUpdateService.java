@@ -106,7 +106,7 @@ public class RepeatingUpdateService extends BroadcastReceiver{
 				dataSources.createNewsItem(n);
 				news = news + " " + it.getName();
 			}
-			for(String id : NewsListItem.deleted){
+			for(String id: NewsListItem.deleted){
 				dataSources.deleteNews(id);
 			}
 			if(list.size() > 0){
@@ -119,7 +119,7 @@ public class RepeatingUpdateService extends BroadcastReceiver{
 						.setContentTitle(context.getResources().getString(R.string.title_notification))
 						.setContentText(news.trim())
 						.setContentInfo(String.valueOf(list.size()))
-						.setSmallIcon(R.drawable.ic_action_email)
+						.setSmallIcon(R.drawable.ic_stat_incoming)
 						.setSound(alarmSound)
 						.setContentIntent(newIntent)
 						.setAutoCancel(true).build();
@@ -132,7 +132,7 @@ public class RepeatingUpdateService extends BroadcastReceiver{
 						.setOngoing(true)
 						.setSound(alarmSound)
 						.setContentIntent(newIntent)
-						.setSmallIcon(R.drawable.ic_action_email);
+						.setSmallIcon(R.drawable.ic_stat_incoming);
 					Notification notif = builder.build();
 					NotificationManager mN = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
 					mN.notify(1, notif);
