@@ -54,6 +54,11 @@ public class MainActivity extends Activity {
 	private static final String TYPE_ERROR = "error";
 	private static final String TYPE_PHOTOS = "photos";
 
+	private static final String TYPE_INCLASS = "внутриклассное";//внутриклассное
+	private static final String TYPE_SCHOOL = "общешкольное";//общешкольное
+	private static final String TYPE_SPORT = "спорт";//спорт
+	private static final String TYPE_ALERT = "срочно";//срочно
+
 	private ListView listview;
 	private List<NewsListItem> list;
 	private Activity activity;
@@ -230,20 +235,28 @@ public class MainActivity extends Activity {
 
 				if(cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.NEWS_COLUMN_TYPE)) == null){
 					image.setImageResource(R.drawable.info);
-				}else if(cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.NEWS_COLUMN_TYPE)).toLowerCase().equals(TYPE_WARNING)){
-					image.setImageResource(R.drawable.danger);
-				}else if(cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.NEWS_COLUMN_TYPE)).toLowerCase().equals(TYPE_QUESTION)){
-					image.setImageResource(R.drawable.question);
-				}else if(cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.NEWS_COLUMN_TYPE)).toLowerCase().equals(TYPE_CHAT)){
-					image.setImageResource(R.drawable.chat);
-				}else if(cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.NEWS_COLUMN_TYPE)).toLowerCase().equals(TYPE_WARNING2)){
-					image.setImageResource(R.drawable.danger2);
-				}else if(cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.NEWS_COLUMN_TYPE)).toLowerCase().equals(TYPE_ERROR)){
-					image.setImageResource(R.drawable.error);
-				}else if(cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.NEWS_COLUMN_TYPE)).toLowerCase().equals(TYPE_INFO)){
+				}else if(cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.NEWS_COLUMN_TYPE)).toLowerCase().equals(TYPE_INCLASS)){
 					image.setImageResource(R.drawable.info);
-				}else if(cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.NEWS_COLUMN_TYPE)).toLowerCase().equals(TYPE_PHOTOS)){
+				}else if(cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.NEWS_COLUMN_TYPE)).toLowerCase().equals(TYPE_SCHOOL)){
+					image.setImageResource(R.drawable.chat);
+				}else if(cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.NEWS_COLUMN_TYPE)).toLowerCase().equals(TYPE_SPORT)){
 					image.setImageResource(R.drawable.photos);
+				}else if(cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.NEWS_COLUMN_TYPE)).toLowerCase().equals(TYPE_ALERT)){
+					image.setImageResource(R.drawable.danger);
+//				}else if(cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.NEWS_COLUMN_TYPE)).toLowerCase().equals(TYPE_WARNING)){
+//					image.setImageResource(R.drawable.danger);
+//				}else if(cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.NEWS_COLUMN_TYPE)).toLowerCase().equals(TYPE_QUESTION)){
+//					image.setImageResource(R.drawable.question);
+//				}else if(cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.NEWS_COLUMN_TYPE)).toLowerCase().equals(TYPE_CHAT)){
+//					image.setImageResource(R.drawable.chat);
+//				}else if(cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.NEWS_COLUMN_TYPE)).toLowerCase().equals(TYPE_WARNING2)){
+//					image.setImageResource(R.drawable.danger2);
+//				}else if(cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.NEWS_COLUMN_TYPE)).toLowerCase().equals(TYPE_ERROR)){
+//					image.setImageResource(R.drawable.error);
+//				}else if(cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.NEWS_COLUMN_TYPE)).toLowerCase().equals(TYPE_INFO)){
+//					image.setImageResource(R.drawable.info);
+//				}else if(cursor.getString(cursor.getColumnIndex(NewsDataSQLHelper.NEWS_COLUMN_TYPE)).toLowerCase().equals(TYPE_PHOTOS)){
+//					image.setImageResource(R.drawable.photos);
 				}else{
 					image.setImageResource(R.drawable.info);
 				}
