@@ -103,6 +103,13 @@ public class MainActivity extends Activity {
 	}
 
 	@Override
+	protected void onResume() {
+		super.onResume();
+		cursor = dataSources.getNewsCursor();
+		cursorAdapter.changeCursor(cursor);
+	}
+
+	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 	}
