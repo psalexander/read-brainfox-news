@@ -81,9 +81,9 @@ public class ImageActivity extends Activity {
 					throw new IOException(statusLine.getReasonPhrase());
 				}
 			} catch (ClientProtocolException e) {
-				Toast.makeText(activity, "При загрузке данных произошла ошибка.", Toast.LENGTH_LONG).show();
+				Toast.makeText(activity, "При загрузке данных произошла ошибка." + e.getMessage(), Toast.LENGTH_LONG).show();
 			} catch (IOException e) {
-				Toast.makeText(activity, "При загрузке данных произошла ошибка.", Toast.LENGTH_LONG).show();
+				Toast.makeText(activity, "При загрузке данных произошла ошибка." + e.getMessage(), Toast.LENGTH_LONG).show();
 			}
 			return null;
 		}
@@ -130,7 +130,7 @@ public class ImageActivity extends Activity {
 					Toast.makeText(this, "Изображение сохранено: " + path, Toast.LENGTH_LONG).show();
 				} catch (Exception e) {
 					e.printStackTrace();
-					Toast.makeText(this, "Ошибка при сохранении", Toast.LENGTH_LONG).show();
+					Toast.makeText(this, "Ошибка при сохранении: " + e.getMessage(), Toast.LENGTH_LONG).show();
 				}finally{
 					try {
 						if(fOut != null){

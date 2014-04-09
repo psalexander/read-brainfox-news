@@ -49,7 +49,7 @@ public class RepeatingUpdateService extends BroadcastReceiver{
 			String r = Urls.URL_GET_NEWS_LIST + dataSources.getLastRequestTime();
 			new RequestTask().execute(r);
 		}
-		Toast.makeText(context, "It's Service Time!", Toast.LENGTH_LONG).show();
+		//Toast.makeText(context, "It's Service Time!", Toast.LENGTH_LONG).show();
 	}
 
 	class RequestTask extends AsyncTask<String, String, String>{
@@ -76,9 +76,9 @@ public class RepeatingUpdateService extends BroadcastReceiver{
 					throw new IOException(statusLine.getReasonPhrase());
 				}
 			} catch (ClientProtocolException e) {
-				Toast.makeText(context, "При загрузке данных произошла ошибка.", Toast.LENGTH_LONG).show();
+				Toast.makeText(context, "При загрузке данных произошла ошибка. " + e.getMessage(), Toast.LENGTH_LONG).show();
 			} catch (IOException e) {
-				Toast.makeText(context, "При загрузке данных произошла ошибка.", Toast.LENGTH_LONG).show();
+				Toast.makeText(context, "При загрузке данных произошла ошибка." + e.getMessage(), Toast.LENGTH_LONG).show();
 			}
 			list = JsonParser.parseJSONtoNewsItem(responseString);
 			if(NewsListItem.errorcode.equals("0")){
@@ -93,7 +93,7 @@ public class RepeatingUpdateService extends BroadcastReceiver{
 			if(!NewsListItem.errorcode.equals("0")){
 				Toast.makeText(context, "Ошибка. Код ошибки " + NewsListItem.errorcode, Toast.LENGTH_SHORT).show();
 			}else{
-				Toast.makeText(context, String.valueOf(list.size()), Toast.LENGTH_SHORT).show();
+				//Toast.makeText(context, String.valueOf(list.size()), Toast.LENGTH_SHORT).show();
 			}
 			String news = "";
 			for (NewsListItem it : list) {

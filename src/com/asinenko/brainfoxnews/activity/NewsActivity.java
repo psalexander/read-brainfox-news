@@ -92,7 +92,7 @@ public class NewsActivity extends Activity {
 		if(CheckConnection.isOnline(this)){
 			new RequestTask().execute(Urls.URL_GET_NEWS_ITEM + id);
 		}else{
-			Toast.makeText(this, "Отсутствует соединение с сетью интернет.", Toast.LENGTH_LONG).show();
+			Toast.makeText(this, "Отсутствует соединение с сетью интернет", Toast.LENGTH_LONG).show();
 		}
 	}
 
@@ -122,9 +122,9 @@ public class NewsActivity extends Activity {
 					throw new IOException(statusLine.getReasonPhrase());
 				}
 			} catch (ClientProtocolException e) {
-				Toast.makeText(activity, "При загрузке списка новостей произошла ошибка", Toast.LENGTH_LONG).show();
+				Toast.makeText(activity, "При загрузке списка новостей произошла ошибка" + e.getMessage(), Toast.LENGTH_LONG).show();
 			} catch (IOException e) {
-				Toast.makeText(activity, "При загрузке списка новостей произошла ошибка", Toast.LENGTH_LONG).show();
+				Toast.makeText(activity, "При загрузке списка новостей произошла ошибка" + e.getMessage(), Toast.LENGTH_LONG).show();
 			}
 			newsItem = JsonParser.parseNewsItem(id, responseString);
 			return responseString;

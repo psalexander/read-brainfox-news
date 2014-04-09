@@ -5,11 +5,13 @@
         android:id="@+id/action_start_sevice"
         android:orderInCategory="100"
         android:showAsAction="never"
+        android:visible="false"
         android:title="Start"/>
     <item
         android:id="@+id/action_stop_sevice"
         android:orderInCategory="100"
         android:showAsAction="never"
+        android:visible="false"
         android:title="Stop"/>
      <item
         android:id="@+id/action_about"

@@ -102,7 +102,7 @@ public class MainActivity extends Activity {
 		}else{
 			Toast.makeText(this, "Отсутствует соединение с сетью интернет.", Toast.LENGTH_LONG).show();
 		}
-		//startService(new Intent(this, RepeatingAlarmGetNewsService.class));
+		startService(new Intent(this, RepeatingAlarmGetNewsService.class));
 	}
 
 	@Override

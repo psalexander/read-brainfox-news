@@ -16,7 +16,6 @@ import android.widget.ImageView;
 public class ImageManager {
 	private final static String TAG = "ImageManager";
 
-	/** Private constructor prevents instantiation from other classes */
 	private ImageManager () {}
 
 	public static void fetchImage(final String iUrl, final ImageView iView) {
