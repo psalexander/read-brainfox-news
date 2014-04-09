@@ -196,7 +196,7 @@ public class MainActivity extends Activity {
 			if(NewsListItem.errorcode != null && !NewsListItem.errorcode.equals("0")){
 				Toast.makeText(getApplicationContext(), "Ошибка сервера " + NewsListItem.errorcode, Toast.LENGTH_SHORT).show();
 			}else{
-				Toast.makeText(getApplicationContext(), String.valueOf(list.size()), Toast.LENGTH_SHORT).show();
+				//Toast.makeText(getApplicationContext(), String.valueOf(list.size()), Toast.LENGTH_SHORT).show();
 			}
 			for (NewsListItem it : list) {
 				NewsSQLItem n = new NewsSQLItem();

@@ -38,7 +38,7 @@ public class MemoryCache {
 	public void put(String id, Bitmap bitmap){
 		try{
 			if(cache.containsKey(id))
-				size-=getSizeInBytes(cache.get(id));
+				size -= getSizeInBytes(cache.get(id));
 			cache.put(id, bitmap);
 			size+=getSizeInBytes(bitmap);
 			checkSize();
@@ -65,7 +65,7 @@ public class MemoryCache {
 	public void clear() {
 		try{
 			cache.clear();
-			size=0;
+			size = 0;
 		}catch(NullPointerException ex){
 			ex.printStackTrace();
 		}

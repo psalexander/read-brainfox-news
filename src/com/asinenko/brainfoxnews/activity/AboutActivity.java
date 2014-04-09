@@ -58,7 +58,7 @@ public class AboutActivity extends Activity implements android.view.View.OnClick
 		case R.id.brainImageView:
 			clickCount++;
 			if(clickCount > 10 && clickCount < 15){
-				imageView.setImageResource(R.drawable.peter_griffin_finished);
+				//imageView.setImageResource(R.drawable.peter_griffin_finished);
 			}else if(clickCount > 15){
 				imageView.setImageResource(R.drawable.peter_griffin_naked);
 			}
