@@ -66,6 +66,7 @@ public class MainActivity extends Activity {
 	private ClientCursorAdapter cursorAdapter;
 	private NewsDataSource dataSources;
 	private Cursor cursor;
+	private boolean isUpdating = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -128,8 +129,10 @@ public class MainActivity extends Activity {
 		switch (item.getItemId()) {
 		case R.id.action_refresh:
 			if(CheckConnection.isOnline(this)){
-				String r = Urls.URL_GET_NEWS_LIST + dataSources.getLastRequestTime();
-				new RequestTask().execute(r);
+				if(!isUpdating){
+					String r = Urls.URL_GET_NEWS_LIST + dataSources.getLastRequestTime();
+					new RequestTask().execute(r);
+				}
 			}else{
 				Toast.makeText(this, "Отсутствует соединение с сетью интернет.", Toast.LENGTH_LONG).show();
 			}
@@ -159,6 +162,7 @@ public class MainActivity extends Activity {
 		protected void onPreExecute() {
 			super.onPreExecute();
 			progressBar.setVisibility(ProgressBar.VISIBLE);
+			isUpdating = true;
 		}
 
 		@Override
@@ -213,6 +217,7 @@ public class MainActivity extends Activity {
 			cursor = dataSources.getNewsCursor();
 			cursorAdapter.changeCursor(cursor);
 			progressBar.setVisibility(ProgressBar.INVISIBLE);
+			isUpdating = false;
 		}
 	}
 
